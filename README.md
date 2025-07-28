@@ -8,4 +8,3 @@ Just install [uv](https://docs.astral.sh/uv/) and run the following commands in 
 uv sync
 uv run <name-of-the-script>
 ```
-```
