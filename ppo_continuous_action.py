@@ -3,6 +3,7 @@ import os
 import random
 import time
 from dataclasses import dataclass
+from muon import SingleDeviceMuonWithAuxAdam
 
 import gymnasium as gym
 import numpy as np
@@ -74,6 +75,10 @@ class Args:
     """the maximum norm for the gradient clipping"""
     target_kl: float = None
     """the target KL divergence threshold"""
+    hidden_size: int = 64
+    """Hidden dimension of actor and critic networks"""
+    muon: bool = False
+    """whether to use muon for the hidden layers or not"""
 
     # to be filled in runtime
     batch_size: int = 0
@@ -113,27 +118,33 @@ def layer_init(layer, std=np.sqrt(2), bias_const=0.0):
 
 
 class Agent(nn.Module):
-    def __init__(self, envs):
+    def __init__(self, envs, hdim):
         super().__init__()
         self.critic = nn.Sequential(
             layer_init(
-                nn.Linear(np.array(envs.single_observation_space.shape).prod(), 64)),
+                nn.Linear(
+                    np.array(envs.single_observation_space.shape).prod(), hdim)
+            ),
             nn.Tanh(),
-            layer_init(nn.Linear(64, 64)),
+            layer_init(nn.Linear(hdim, hdim)),
             nn.Tanh(),
-            layer_init(nn.Linear(64, 1), std=1.0),
+            layer_init(nn.Linear(hdim, 1), std=1.0),
         )
         self.actor_mean = nn.Sequential(
             layer_init(
-                nn.Linear(np.array(envs.single_observation_space.shape).prod(), 64)),
+                nn.Linear(
+                    np.array(envs.single_observation_space.shape).prod(), hdim)
+            ),
             nn.Tanh(),
-            layer_init(nn.Linear(64, 64)),
+            layer_init(nn.Linear(hdim, hdim)),
             nn.Tanh(),
-            layer_init(nn.Linear(64, np.prod(
-                envs.single_action_space.shape)), std=0.01),
+            layer_init(
+                nn.Linear(hdim, np.prod(envs.single_action_space.shape)), std=0.01
+            ),
         )
-        self.actor_logstd = nn.Parameter(torch.zeros(
-            1, np.prod(envs.single_action_space.shape)))
+        self.actor_logstd = nn.Parameter(
+            torch.zeros(1, np.prod(envs.single_action_space.shape))
+        )
 
     def get_value(self, x):
         return self.critic(x)
@@ -145,7 +156,12 @@ class Agent(nn.Module):
         probs = Normal(action_mean, action_std)
         if action is None:
             action = probs.sample()
-        return action, probs.log_prob(action).sum(1), probs.entropy().sum(1), self.critic(x)
+        return (
+            action,
+            probs.log_prob(action).sum(1),
+            probs.entropy().sum(1),
+            self.critic(x),
+        )
 
 
 if __name__ == "__main__":
@@ -169,8 +185,8 @@ if __name__ == "__main__":
     writer = SummaryWriter(f"runs/{run_name}")
     writer.add_text(
         "hyperparameters",
-        "|param|value|\n|-|-|\n%s" % (
-            "\n".join([f"|{key}|{value}|" for key, value in vars(args).items()])),
+        "|param|value|\n|-|-|\n%s"
+        % ("\n".join([f"|{key}|{value}|" for key, value in vars(args).items()])),
     )
 
     # TRY NOT TO MODIFY: seeding
@@ -184,20 +200,56 @@ if __name__ == "__main__":
 
     # env setup
     envs = gym.vector.SyncVectorEnv(
-        [make_env(args.env_id, i, args.capture_video, run_name, args.gamma)
-         for i in range(args.num_envs)]
+        [
+            make_env(args.env_id, i, args.capture_video, run_name, args.gamma)
+            for i in range(args.num_envs)
+        ]
     )
-    assert isinstance(envs.single_action_space,
-                      gym.spaces.Box), "only continuous action space is supported"
+    assert isinstance(
+        envs.single_action_space, gym.spaces.Box
+    ), "only continuous action space is supported"
 
-    agent = Agent(envs).to(device)
-    optimizer = optim.Adam(agent.parameters(), lr=args.learning_rate, eps=1e-5)
+    agent = Agent(envs, args.hidden_size).to(device)
+
+    if args.muon:
+        hidden_weights, other_params = [], []
+        for param in agent.parameters():
+            if len(param.shape) >= 2 and param.shape[0] == args.hidden_size \
+                    and param.shape[1] == args.hidden_size:
+                hidden_weights.append(param)
+            else:
+                other_params.append(param)
+
+        param_groups = [
+            dict(params=hidden_weights,
+                 use_muon=True,
+                 # lr=0.02,
+                 # weight_decay=0.01
+                 ),
+            dict(
+                params=other_params,
+                use_muon=False,
+                # lr=3e-4,
+                # betas=(0.9, 0.95),
+                # weight_decay=0.01,
+            ),
+        ]
+        optimizer = SingleDeviceMuonWithAuxAdam(param_groups)
+        num_hparams = sum(p.numel() for p in hidden_weights)
+        num_other = sum(p.numel() for p in other_params)
+        print(
+            f"[*] Using Muon! ({round(100*num_hparams/(num_other+num_hparams), 3)}% of params)")
+    else:
+        optimizer = optim.Adam(
+            agent.parameters(), lr=args.learning_rate, eps=1e-5)
 
     # ALGO Logic: Storage setup
-    obs = torch.zeros((args.num_steps, args.num_envs) +
-                      envs.single_observation_space.shape).to(device)
-    actions = torch.zeros((args.num_steps, args.num_envs) +
-                          envs.single_action_space.shape).to(device)
+    obs = torch.zeros(
+        (args.num_steps, args.num_envs) + envs.single_observation_space.shape
+    ).to(device)
+    actions = torch.zeros(
+        (args.num_steps, args.num_envs) + envs.single_action_space.shape
+    ).to(device)
     logprobs = torch.zeros((args.num_steps, args.num_envs)).to(device)
     rewards = torch.zeros((args.num_steps, args.num_envs)).to(device)
     dones = torch.zeros((args.num_steps, args.num_envs)).to(device)
@@ -232,21 +284,26 @@ if __name__ == "__main__":
 
             # TRY NOT TO MODIFY: execute the game and log data.
             next_obs, reward, terminations, truncations, infos = envs.step(
-                action.cpu().numpy())
+                action.cpu().numpy()
+            )
             next_done = np.logical_or(terminations, truncations)
             rewards[step] = torch.tensor(reward).to(device).view(-1)
-            next_obs, next_done = torch.Tensor(next_obs).to(
-                device), torch.Tensor(next_done).to(device)
+            next_obs, next_done = torch.Tensor(next_obs).to(device), torch.Tensor(
+                next_done
+            ).to(device)
 
             if "final_info" in infos:
                 for info in infos["final_info"]:
                     if info and "episode" in info:
                         print(
-                            f"global_step={global_step}, episodic_return={info['episode']['r']}")
+                            f"global_step={global_step}, episodic_return={info['episode']['r']}"
+                        )
                         writer.add_scalar(
-                            "charts/episodic_return", info["episode"]["r"], global_step)
+                            "charts/episodic_return", info["episode"]["r"], global_step
+                        )
                         writer.add_scalar(
-                            "charts/episodic_length", info["episode"]["l"], global_step)
+                            "charts/episodic_length", info["episode"]["l"], global_step
+                        )
 
         # bootstrap value if not done
         with torch.no_grad():
@@ -260,10 +317,13 @@ if __name__ == "__main__":
                 else:
                     nextnonterminal = 1.0 - dones[t + 1]
                     nextvalues = values[t + 1]
-                delta = rewards[t] + args.gamma * \
-                    nextvalues * nextnonterminal - values[t]
-                advantages[t] = lastgaelam = delta + args.gamma * \
-                    args.gae_lambda * nextnonterminal * lastgaelam
+                delta = (
+                    rewards[t] + args.gamma * nextvalues *
+                    nextnonterminal - values[t]
+                )
+                advantages[t] = lastgaelam = (
+                    delta + args.gamma * args.gae_lambda * nextnonterminal * lastgaelam
+                )
             returns = advantages + values
 
         # flatten the batch
@@ -284,7 +344,8 @@ if __name__ == "__main__":
                 mb_inds = b_inds[start:end]
 
                 _, newlogprob, entropy, newvalue = agent.get_action_and_value(
-                    b_obs[mb_inds], b_actions[mb_inds])
+                    b_obs[mb_inds], b_actions[mb_inds]
+                )
                 logratio = newlogprob - b_logprobs[mb_inds]
                 ratio = logratio.exp()
 
@@ -292,18 +353,21 @@ if __name__ == "__main__":
                     # calculate approx_kl http://joschu.net/blog/kl-approx.html
                     old_approx_kl = (-logratio).mean()
                     approx_kl = ((ratio - 1) - logratio).mean()
-                    clipfracs += [((ratio - 1.0).abs() >
-                                   args.clip_coef).float().mean().item()]
+                    clipfracs += [
+                        ((ratio - 1.0).abs() > args.clip_coef).float().mean().item()
+                    ]
 
                 mb_advantages = b_advantages[mb_inds]
                 if args.norm_adv:
-                    mb_advantages = (
-                        mb_advantages - mb_advantages.mean()) / (mb_advantages.std() + 1e-8)
+                    mb_advantages = (mb_advantages - mb_advantages.mean()) / (
+                        mb_advantages.std() + 1e-8
+                    )
 
                 # Policy loss
                 pg_loss1 = -mb_advantages * ratio
-                pg_loss2 = -mb_advantages * \
-                    torch.clamp(ratio, 1 - args.clip_coef, 1 + args.clip_coef)
+                pg_loss2 = -mb_advantages * torch.clamp(
+                    ratio, 1 - args.clip_coef, 1 + args.clip_coef
+                )
                 pg_loss = torch.max(pg_loss1, pg_loss2).mean()
 
                 # Value loss
@@ -340,8 +404,9 @@ if __name__ == "__main__":
             np.var(y_true - y_pred) / var_y
 
         # TRY NOT TO MODIFY: record rewards for plotting purposes
-        writer.add_scalar("charts/learning_rate",
-                          optimizer.param_groups[0]["lr"], global_step)
+        writer.add_scalar(
+            "charts/learning_rate", optimizer.param_groups[0]["lr"], global_step
+        )
         writer.add_scalar("losses/value_loss", v_loss.item(), global_step)
         writer.add_scalar("losses/policy_loss", pg_loss.item(), global_step)
         writer.add_scalar("losses/entropy", entropy_loss.item(), global_step)
@@ -352,8 +417,10 @@ if __name__ == "__main__":
         writer.add_scalar("losses/explained_variance",
                           explained_var, global_step)
         print("SPS:", int(global_step / (time.time() - start_time)))
-        writer.add_scalar("charts/SPS", int(global_step /
-                          (time.time() - start_time)), global_step)
+        writer.add_scalar(
+            "charts/SPS", int(global_step / (time.time() -
+                              start_time)), global_step
+        )
 
     if args.save_model:
         model_path = f"runs/{run_name}/{args.exp_name}.cleanrl_model"
@@ -379,8 +446,14 @@ if __name__ == "__main__":
 
             repo_name = f"{args.env_id}-{args.exp_name}-seed{args.seed}"
             repo_id = f"{args.hf_entity}/{repo_name}" if args.hf_entity else repo_name
-            push_to_hub(args, episodic_returns, repo_id, "PPO",
-                        f"runs/{run_name}", f"videos/{run_name}-eval")
+            push_to_hub(
+                args,
+                episodic_returns,
+                repo_id,
+                "PPO",
+                f"runs/{run_name}",
+                f"videos/{run_name}-eval",
+            )
 
     envs.close()
     writer.close()
