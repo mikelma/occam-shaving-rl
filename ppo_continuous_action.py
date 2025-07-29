@@ -223,13 +223,13 @@ if __name__ == "__main__":
         param_groups = [
             dict(params=hidden_weights,
                  use_muon=True,
-                 # lr=0.02,
+                 lr=0.02,
                  # weight_decay=0.01
                  ),
             dict(
                 params=other_params,
                 use_muon=False,
-                # lr=3e-4,
+                lr=args.learning_rate,
                 # betas=(0.9, 0.95),
                 # weight_decay=0.01,
             ),
