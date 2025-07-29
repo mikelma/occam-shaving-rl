@@ -65,13 +65,13 @@
             <time datetime="2025-07-28">July 28</time>
             <p>
                 After looking through the 37 tricks, we devised our own list, with some high-level groupings of the tricks that made sense to us.
-                This resulted in a list of 13 tricks (in 5 categories):
+                This resulted in a list of 12 tricks (in 5 categories):
                 <ul>
                     <li>Normalization and clipping</li>
                     <ul>
                         <li>🮲🮳 [Mahvash] Normalization of the advantage estimates (remove? or change to symlog)</li>
                         <li>Surrogate objective clipping (remove?)</li>
-                        <li>Value function clipping (remove?)</li>
+                        <li>🮲🮳 [Fahd] Value function clipping (remove?)</li>
                         <li>🮲🮳 [Mahvash] Gradient clipping (remove?)</li>
                     </ul>
                     <li>Advantage Estimation</li>
@@ -86,7 +86,7 @@
                     <ul>
                         <li>Check other weight initializations</li>
                         <li>🮲🮳 [Mikel] Change the optimizer from Adam to Muon (or others)</li>
-                        <li>🮲🮳 [Mahvash]Adam LR scheduler (remove?)</li>
+                        <li>🮲🮳 [Mahvash] Adam LR scheduler (remove?)</li>
                         <li>🮲🮳 [Seth] Use multiple heads (same backbone network)</li>
                     </ul>
                     <!-- <li>Policy Losses</li>
@@ -95,7 +95,7 @@
                     </ul> -->
                     <li>Mujuco-specific</li>
                     <ul>
-                        <li>Learn the covariance for the continuous actions predictor</li>
+                        <!-- <li>Learn the covariance for the continuous actions predictor</li> -->
                         <!-- <li>Try to use the same backbone for actor and critic</li> -->
                         <li>🮲🮳 [Kunal] Observation clipping (remove?)</li>
                         <li>🮲🮳 [Kunal] Reward scaling (replace with symlog)</li>
@@ -112,6 +112,14 @@
                 We ran the baseline with the default hyperparameters from the CleanRL codebase:
                 <iframe src="https://wandb.ai/occam-shaving-rl/baselines/reports/Copy-of-paulius-s-Baseline--VmlldzoxMzc4NzY1MQ" style="border:none;height:786px;width:100%"></iframe>
                 This set the bar we'd have to meet for our other experiments.
+            </p>
+        </section>
+        <section>
+            <h2>Individual Ablations</h2>
+            <time datetime="2025-07-29">July 29</time>
+            <p>
+                We ran all different (first-order) changes from the list above:
+                <iframe src="https://wandb.ai/occam-shaving-rl/baselines/reports/Occam-shaving-RL--VmlldzoxMzc4NjU4NQ" style="border:none;height:1024px;width:100%"></iframe>
             </p>
         </section>
         <hr/>
