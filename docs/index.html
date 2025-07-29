@@ -6,6 +6,7 @@
     <title>Occam Shaving (DLRL 2025)</title>
     <style>
         body {
+            font-family: sans-serif;
             margin: 40px auto;
             max-width: 650px;
             line-height: 1.6;
@@ -64,14 +65,14 @@
             <time datetime="2025-07-28">July 28</time>
             <p>
                 After looking through the 37 tricks, we devised our own list, with some high-level groupings of the tricks that made sense to us.
-                This resulted in a list of 15 tricks (in 6 categories):
+                This resulted in a list of 13 tricks (in 5 categories):
                 <ul>
                     <li>Normalization and clipping</li>
                     <ul>
-                        <li>Normalization of the advantage estimates (remove? or change to symlog)</li>
+                        <li>🮲🮳 [Mahvash] Normalization of the advantage estimates (remove? or change to symlog)</li>
                         <li>Surrogate objective clipping (remove?)</li>
                         <li>Value function clipping (remove?)</li>
-                        <li>Gradient clipping (remove?)</li>
+                        <li>🮲🮳 [Mahvash] Gradient clipping (remove?)</li>
                     </ul>
                     <li>Advantage Estimation</li>
                     <ul>
@@ -84,31 +85,33 @@
                     <li>Architecture</li>
                     <ul>
                         <li>Check other weight initializations</li>
-                        <li>Change the optimizer from Adam to Muon (or others)</li>
-                        <li>Adam LR scheduler (remove?)</li>
-                        <li>Use multiple heads (same backbone network)</li>
+                        <li>🮲🮳 [Mikel] Change the optimizer from Adam to Muon (or others)</li>
+                        <li>🮲🮳 [Mahvash]Adam LR scheduler (remove?)</li>
+                        <li>🮲🮳 [Seth] Use multiple heads (same backbone network)</li>
                     </ul>
-                    <li>Policy Losses</li>
+                    <!-- <li>Policy Losses</li>
                     <ul>
-                        <li>Entropy bonus (remove?)</li>
-                    </ul>
+                        <li>🮲🮳 [Mikel] Entropy bonus (remove?)</li>
+                    </ul> -->
                     <li>Mujuco-specific</li>
                     <ul>
                         <li>Learn the covariance for the continuous actions predictor</li>
-                        <li>Try to use the same backbone for actor and critic</li>
-                        <li>Observation clipping (remove?)</li>
-                        <li>Reward scaling (replace with symlog)</li>
+                        <!-- <li>Try to use the same backbone for actor and critic</li> -->
+                        <li>🮲🮳 [Kunal] Observation clipping (remove?)</li>
+                        <li>🮲🮳 [Kunal] Reward scaling (replace with symlog)</li>
                     </ul>
                 </ul>
                 We decided to use the PPO implementation from the <a href="https://github.com/vwxyzjn/cleanrl">CleanRL</a> GitHub repository, because it contains all the 37 tricks from the blog post.
-                We chose the <code>HalfCheetah-v4</code> environment.
+                We chose the <code>HalfCheetah-v4</code> environment for preliminary runs, with 10 experiment replications (seeds).
             </p>
         </section>
         <section>
             <h2>Baseline</h2>
             <time datetime="2025-07-29">July 29</time>
             <p>
-                todo
+                We ran the baseline with the default hyperparameters from the CleanRL codebase:
+                <iframe src="https://wandb.ai/occam-shaving-rl/baselines/reports/Copy-of-paulius-s-Baseline--VmlldzoxMzc4NzY1MQ" style="border:none;height:786px;width:100%"></iframe>
+                This set the bar we'd have to meet for our other experiments.
             </p>
         </section>
         <hr/>
