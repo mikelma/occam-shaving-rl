@@ -24,7 +24,7 @@ class Args:
     """if toggled, `torch.backends.cudnn.deterministic=False`"""
     cuda: bool = True
     """if toggled, cuda will be enabled by default"""
-    track: bool = False
+    track: bool = True
     """if toggled, this experiment will be tracked with Weights and Biases"""
     wandb_project_name: str = "baselines"
     """the wandb's project name"""
@@ -74,6 +74,8 @@ class Args:
     """the maximum norm for the gradient clipping"""
     target_kl: float = None
     """the target KL divergence threshold"""
+    grad_norm: bool = True
+    """whether to do gradient normalization"""
 
     # to be filled in runtime
     batch_size: int = 0
@@ -327,8 +329,9 @@ if __name__ == "__main__":
 
                 optimizer.zero_grad()
                 loss.backward()
-                nn.utils.clip_grad_norm_(
-                    agent.parameters(), args.max_grad_norm)
+                if args.grad_norm:
+                    nn.utils.clip_grad_norm_(
+                        agent.parameters(), args.max_grad_norm)
                 optimizer.step()
 
             if args.target_kl is not None and approx_kl > args.target_kl:
