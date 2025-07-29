@@ -2,6 +2,7 @@
 import os
 import random
 import time
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from muon import SingleDeviceMuonWithAuxAdam
 
@@ -79,6 +80,8 @@ class Args:
     """Hidden dimension of actor and critic networks"""
     muon: bool = False
     """whether to use muon for the hidden layers or not"""
+    shared_network: bool = False
+    """whether to use shard networks or not"""
 
     # to be filled in runtime
     batch_size: int = 0
@@ -116,8 +119,17 @@ def layer_init(layer, std=np.sqrt(2), bias_const=0.0):
     torch.nn.init.constant_(layer.bias, bias_const)
     return layer
 
+class BaseAgent(nn.Module, ABC):
+    @abstractmethod
+    def get_value(self, x):
+        pass
 
-class Agent(nn.Module):
+    @abstractmethod
+    def get_action_and_value(self, x, action=None):
+        pass
+
+
+class Agent(BaseAgent):
     def __init__(self, envs, hdim):
         super().__init__()
         self.critic = nn.Sequential(
@@ -161,6 +173,46 @@ class Agent(nn.Module):
             probs.log_prob(action).sum(1),
             probs.entropy().sum(1),
             self.critic(x),
+        )
+
+class SharedAgent(BaseAgent):
+    def __init__(self, envs, hdim):
+        super().__init__()
+        self.backbone = nn.Sequential(
+            layer_init(
+                nn.Linear(
+                    np.array(envs.single_observation_space.shape).prod(), hdim)
+            ),
+            nn.Tanh(),
+            layer_init(nn.Linear(hdim, hdim)),
+            nn.Tanh(),
+        )
+        self.critic_head = layer_init(nn.Linear(hdim, 1), std=1.0)
+        self.actor_head_mean = layer_init(
+                nn.Linear(hdim, np.prod(envs.single_action_space.shape)), std=0.01
+            )
+        self.actor_logstd = nn.Parameter(
+            torch.zeros(1, np.prod(envs.single_action_space.shape))
+        )
+
+    def get_value(self, x):
+        h = self.backbone(x)
+        return self.critic_head(h)
+
+    def get_action_and_value(self, x, action=None):
+        h = self.backbone(x)
+        action_mean = self.actor_head_mean(h)
+        action_logstd = self.actor_logstd.expand_as(action_mean)
+        action_std = torch.exp(action_logstd)
+        probs = Normal(action_mean, action_std)
+        if action is None:
+            action = probs.sample()
+        values = self.get_value(x)
+        return (
+            action,
+            probs.log_prob(action).sum(1),
+            probs.entropy().sum(1),
+            values,
         )
 
 
@@ -209,7 +261,10 @@ if __name__ == "__main__":
         envs.single_action_space, gym.spaces.Box
     ), "only continuous action space is supported"
 
-    agent = Agent(envs, args.hidden_size).to(device)
+    if args.shared_network:
+        agent = SharedAgent(envs, args.hidden_size).to(device)
+    else:
+        agent = Agent(envs, args.hidden_size).to(device)
 
     if args.muon:
         hidden_weights, other_params = [], []
