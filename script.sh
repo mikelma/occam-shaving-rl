@@ -9,12 +9,16 @@
 echo "Starting task $SLURM_ARRAY_TASK_ID"
 module load python/3.13 gcc opencv mujuco
 
-virtualenv --no-download $SLURM_TMPDIR/env
-source $SLURM_TMPDIR/env/bin/activate
-python -m pip install --no-index --upgrade pip
+# Set up variables
+VENV_SOURCE=".venv"
+VENV_TARGET="$SLURM_TMPDIR/.venv"
 
-python -m pip install --no-index -r compute-canada-requirements.txt
+echo "Copying virtual environment to local scratch..."
+cp -r "$VENV_SOURCE" "$VENV_TARGET"
 
-export WANDDB_MODE="offline"
+# Point Python to use the copied virtualenv
+source "$VENV_TARGET/bin/activate"
+
+wandb offline
 
 python ppo_continuous_action.py
