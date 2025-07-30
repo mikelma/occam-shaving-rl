@@ -31,5 +31,5 @@ uv venv "$VENV_DIR"
 source "$VENV_DIR/bin/activate"
 
 # Install Requirements
-uv --venv "$VENV_DIR" sync
-uv --venv "$VENV_DIR" run ppo_continuous_action.py --shared_network --seed=$SLURM_ARRAY_TASK_ID
+uv sync
+python ppo_continuous_action.py --shared_network --seed=$SLURM_ARRAY_TASK_ID
