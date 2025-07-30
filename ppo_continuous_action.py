@@ -84,6 +84,8 @@ class Args:
     """whether to use shard networks or not"""
     grad_norm: bool = True
     """whether to do gradient normalization"""
+    symlog: bool = False
+    """whether to use symlog for reward transform (clipping) or not"""
 
     # to be filled in runtime
     batch_size: int = 0
@@ -109,8 +111,12 @@ def make_env(env_id, idx, capture_video, run_name, gamma):
         env = gym.wrappers.TransformObservation(
             env, lambda obs: np.clip(obs, -10, 10))
         env = gym.wrappers.NormalizeReward(env, gamma=gamma)
-        env = gym.wrappers.TransformReward(
-            env, lambda reward: np.clip(reward, -10, 10))
+        if args.symlog:
+            env = gym.wrappers.TransformReward(
+                env, lambda reward: np.sign(reward) * np.log1p(np.abs(reward))) #symlog transform
+        else:
+            env = gym.wrappers.TransformReward(
+                env, lambda reward: np.clip(reward, -10, 10))
         return env
 
     return thunk
