@@ -69,36 +69,36 @@
                 <ul>
                     <li>Normalization and clipping</li>
                     <ul>
-                        <li>🮲🮳 [Mahvash] Normalization of the advantage estimates (remove? or change to symlog)</li>
-                        <li>🮲🮳 [Paulius] Surrogate objective clipping (remove?)</li>
-                        <li>🮲🮳 [Mikel] Value function clipping (remove?)</li>
-                        <li>🮲🮳 [Mahvash] Gradient clipping (remove?)</li>
+                        <li>Normalization of the advantage estimates (remove? or change to symlog) [🮲🮳 Mahvash]</li>
+                        <li>Surrogate objective clipping (remove?) [🮲🮳 Paulius]</li>
+                        <li>Value function clipping (remove?) [🮲🮳 Mikel]</li>
+                        <li>Gradient clipping (remove?) [🮲🮳 Mahvash]</li>
                     </ul>
                     <li>Advantage Estimation</li>
                     <ul>
-                        <li>🮲🮳 [Fahd] Change GAE to just advantage prediction</li>
+                        <li>Change GAE to just advantage prediction [🮲🮳 Fahd]</li>
                     </ul>
                     <li>Training setup</li>
                     <ul>
-                        <li>🮲🮳 [Kunal] Use full batch instead of mini-batch</li>
+                        <li>Use full batch instead of mini-batch [🮲🮳 Kunal]</li>
                     </ul>
                     <li>Architecture</li>
                     <ul>
-                        <li>🮲🮳 [Paulius] Check other weight initializations</li>
-                        <li>🮲🮳 [Mikel] Change the optimizer from Adam to Muon (or others)</li>
-                        <li>🮲🮳 [Mahvash] Adam LR scheduler (remove?)</li>
-                        <li>🮲🮳 [Seth] Use multiple heads (same backbone network)</li>
+                        <li>Check other weight initializations [🮲🮳 Paulius]</li>
+                        <li>Change the optimizer from Adam to Muon (or others) [🮲🮳 Mikel]</li>
+                        <li>Adam LR scheduler (remove?) [🮲🮳 Mahvash]</li>
+                        <li>Use multiple heads (same backbone network) [🮲🮳 Seth]</li>
                     </ul>
                     <!-- <li>Policy Losses</li>
                     <ul>
-                        <li>🮲🮳 [Mikel] Entropy bonus (remove?)</li>
+                        <li>Entropy bonus (remove?) [🮲🮳 Mikel]</li>
                     </ul> -->
                     <li>Mujuco-specific</li>
                     <ul>
                         <!-- <li>Learn the covariance for the continuous actions predictor</li> -->
                         <!-- <li>Try to use the same backbone for actor and critic</li> -->
-                        <li>🮲🮳 [Kunal] Observation clipping (remove?)</li>
-                        <li>🮲🮳 [Kunal] Reward scaling (replace with symlog)</li>
+                        <li>Observation clipping (remove?) [🮲🮳 Kunal]</li>
+                        <li>Reward scaling (replace with symlog) [🮲🮳 Kunal]</li>
                     </ul>
                 </ul>
                 We decided to use the PPO implementation from the <a href="https://github.com/vwxyzjn/cleanrl">CleanRL</a> GitHub repository, because it contains all the 37 tricks from the blog post.
@@ -118,8 +118,83 @@
             <h2>Individual Ablations</h2>
             <time datetime="2025-07-29">July 29</time>
             <p>
-                We ran all different (first-order) changes from the list above:
-                <iframe src="https://wandb.ai/occam-shaving-rl/baselines/reports/Occam-shaving-RL--VmlldzoxMzc4NjU4NQ" style="border:none;height:1024px;width:100%"></iframe>
+                We decided that we need to try out all of tricks removed, one by one.
+                We call this first-order ablations.
+
+                The results can be seen here:
+                <iframe src="https://wandb.ai/occam-shaving-rl/baselines/reports/First-order-ablations--VmlldzoxMzgwMjQ0Ng" style="border:none;height:1024px;width:100%"></iframe>
+            </p>
+            <p>
+                Some of our conclusions:
+                <ul>
+                    <li>Muon is doing well.</li>
+                    <li>Removing gradient clipping is doing well.</li>
+                    <li>Chaning reward clipping to symlog is doing well.</li>
+                    <li>Removing gradient normalization seeps to be doing well.</li>
+                </ul>
+            </p>
+        </section>
+        <section>
+            <h2>Group Ablations</h2>
+            <time datetime="2025-07-30">July 30</time>
+            <p>
+                We decided to try changing multiple things in a run, to see how they interact.
+                The different combos we tried are:
+                <ol>
+                    <li>Combo 1</li>
+                    <ul>
+                        <li>Muon optimizer</li>
+                        <li>Smaller learning rate (0.0003)</li>
+                        <li>Remove clipping</li>
+                    </ul>
+                    <li>Combo 2</li>
+                    <ul>
+                        <li>Muon optimizer</li>
+                        <li>Fullbatch</li>
+                        <li>No learning rate scheduler</li>
+                        <li>No normalization of the advantage function</li>
+                        <li>No entropy bonus (KL term)</li>
+                        <li>Remove observation clipping</li>
+                        <li>Remove gradient clipping</li>
+                    </ul>
+                    <li>Combo 3</li>
+                    <ul>
+                        <li>Muon optimizer</li>
+                        <li>No gradient normalization</li>
+                        <li>No learning rate scheudler</li>
+                    </ul>
+                    <li>Combo 4</li>
+                    <ul>
+                        <li>Muon optimizer</li>
+                        <li>GAE lambda = 1</li>
+                        <li>No normalization of advantage function</li>
+                        <li>No entropy bonus (KL term)</li>
+                        <li>No gradient normalization</li>
+                        <li>Use shared (backbone) network</li>
+                        <li>Smaller learning rate (0.00015)</li>
+                    </ul>
+                    <li>Combo 5</li>
+                    <ul>
+                        <li>Muon optimizer</li>
+                        <li>GAE lambda = 1</li>
+                        <li>No normalization of advantage function</li>
+                        <li>No entropy bonus (KL term)</li>
+                        <li>No gradient normalization</li>
+                        <li>Use shared (backbone) network</li>
+                        <li>Fullbatch</li>
+                    </ul>
+                    <li>Combo 6</li>
+                    <ul>
+                        <li>Muon optimizer</li>
+                        <li>GAE lambda = 1</li>
+                        <li>No normalization of advantage function</li>
+                        <li>No entropy bonus (KL term)</li>
+                        <li>No gradient normalization</li>
+                        <li>Use shared (backbone) network</li>
+                        <li>Fullbatch</li>
+                        <li>Tuned learning rate (0.001)</li>
+                    </ul>
+                </ol>
             </p>
         </section>
         <hr/>
