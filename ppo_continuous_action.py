@@ -3,8 +3,8 @@ import os
 import random
 import time
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
-from muon import SingleDeviceMuonWithAuxAdam
+from dataclasses import dataclass, field
+from typing import Callable, Literal
 
 import gymnasium as gym
 import numpy as np
@@ -14,6 +14,10 @@ import torch.optim as optim
 import tyro
 from torch.distributions.normal import Normal
 from torch.utils.tensorboard import SummaryWriter
+
+from muon import SingleDeviceMuonWithAuxAdam
+
+WeightInitializations = Literal["cleanrl", "he", "xavier", "xavier_normal", "kaiming", "kaiming_normal"]
 
 
 @dataclass
@@ -95,6 +99,9 @@ class Args:
     num_iterations: int = 0
     """the number of iterations (computed in runtime)"""
 
+    weight_initialization: WeightInitializations = field(default="cleanrl")
+    """the type of weight initialization used to initialize the weights of the network"""
+
 
 def make_env(env_id, idx, capture_video, run_name, gamma, symlog):
     def thunk():
@@ -122,7 +129,37 @@ def make_env(env_id, idx, capture_video, run_name, gamma, symlog):
     return thunk
 
 
-def layer_init(layer, std=np.sqrt(2), bias_const=0.0):
+def layer_init_xavier(layer, gain=1.0, bias_const=0.0, **kwargs):
+    torch.nn.init.xavier_uniform_(layer.weight, gain=gain)
+    torch.nn.init.constant_(layer.bias, bias_const)
+    return layer
+
+
+def layer_init_xavier_normal(layer, gain=1.0, bias_const=0.0, **kwargs):
+    torch.nn.init.xavier_normal_(layer.weight, gain=gain)
+    torch.nn.init.constant_(layer.bias, bias_const)
+    return layer
+
+
+def layer_init_kaiming(layer, mode="fan_in", nonlinearity="tanh", bias_const=0.0, **kwargs):
+    torch.nn.init.kaiming_uniform_(layer.weight, mode=mode, nonlinearity=nonlinearity)
+    torch.nn.init.constant_(layer.bias, bias_const)
+    return layer
+
+
+def layer_init_kaiming_normal(layer, mode="fan_in", nonlinearity="tanh", bias_const=0.0, **kwargs):
+    torch.nn.init.kaiming_normal_(layer.weight, mode=mode, nonlinearity=nonlinearity)
+    torch.nn.init.constant_(layer.bias, bias_const)
+    return layer
+
+
+def layer_init_he(layer, mode="fan_in", bias_const=0.0, **kwargs):
+    torch.nn.init.kaiming_uniform_(layer.weight, mode=mode, nonlinearity="tanh")
+    torch.nn.init.constant_(layer.bias, bias_const)
+    return layer
+
+
+def layer_init_cleanrl(layer, std=np.sqrt(2), bias_const=0.0, **kwargs):
     torch.nn.init.orthogonal_(layer.weight, std)
     torch.nn.init.constant_(layer.bias, bias_const)
     return layer
@@ -139,7 +176,8 @@ class BaseAgent(nn.Module, ABC):
 
 
 class Agent(BaseAgent):
-    def __init__(self, envs, hdim):
+
+    def __init__(self, envs, hdim, layer_init=layer_init_cleanrl):
         super().__init__()
         self.critic = nn.Sequential(
             layer_init(
@@ -186,7 +224,8 @@ class Agent(BaseAgent):
 
 
 class SharedAgent(BaseAgent):
-    def __init__(self, envs, hdim):
+
+    def __init__(self, envs, hdim, layer_init=layer_init_cleanrl):
         super().__init__()
         self.backbone = nn.Sequential(
             layer_init(
@@ -272,10 +311,22 @@ if __name__ == "__main__":
         envs.single_action_space, gym.spaces.Box
     ), "only continuous action space is supported"
 
+    layer_inits: dict[WeightInitializations, Callable] = {
+        "cleanrl": layer_init_cleanrl,
+        "he": layer_init_he,
+        "xavier": layer_init_xavier,
+        "xavier_normal": layer_init_xavier_normal,
+        "kaiming": layer_init_kaiming,
+        "kaiming_normal": layer_init_kaiming_normal,
+    }
+
+    # weight initialization
+    layer_init = layer_inits[args.weight_initialization]
+
     if args.shared_network:
-        agent = SharedAgent(envs, args.hidden_size).to(device)
+        agent = SharedAgent(envs, args.hidden_size, layer_init=layer_init).to(device)
     else:
-        agent = Agent(envs, args.hidden_size).to(device)
+        agent = Agent(envs, args.hidden_size, layer_init=layer_init).to(device)
 
     if args.muon:
         hidden_weights, other_params = [], []
