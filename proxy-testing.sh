@@ -9,6 +9,9 @@
 echo "Starting task $SLURM_ARRAY_TASK_ID"
 module load python/3.12 gcc opencv
 
+echo "Loading Keys"
+source keys.env
+
 echo "Starting Proxy"
 
 pip install --no-index requests[socks]
@@ -20,5 +23,13 @@ fi
 
 wandb offline
 
-uv sync
-uv run ppo_continuous_action.py --seed=$SLURM_ARRAY_TASK_ID --run-id=$SLURM_ARRAY_TASK_ID
+# Create venv in $SLURM_TMPDIR
+VENV_DIR=$SLURM_TMPDIR/venv
+uv venv "$VENV_DIR"
+
+# Activate
+source "$VENV_DIR/bin/activate"
+
+# Install Requirements
+uv pip sync
+uv run ppo_continuous_action.py --shared_network --seed=$SLURM_ARRAY_TASK_ID
