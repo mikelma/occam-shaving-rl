@@ -2,7 +2,7 @@
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=16G
 #SBATCH --time=0-2:59
-#SBATCH --array=1-1
+#SBATCH --array=1-2
 #SBATCH --account=def-mbowling
 #SBATCH --gpus-per-node=1
 
@@ -21,7 +21,12 @@ if [ "$SLURM_TMPDIR" != "" ]; then
     export ALL_PROXY=socks5h://localhost:8888
 fi
 
-wandb offline
+# wandb setup
+
+# wandb offline
+
+echo "Logging into Wandb..."
+wandb login $WANDB_API_KEY
 
 # Create venv in $SLURM_TMPDIR
 VENV_DIR=$SLURM_TMPDIR/venv
@@ -32,4 +37,4 @@ source "$VENV_DIR/bin/activate"
 
 # Install Requirements
 uv sync --active 
-uv run --active python ppo_continuous_action.py --shared_network --seed=$SLURM_ARRAY_TASK_ID
+uv run --active python ppo_continuous_action.py --shared_network --seed=$SLURM_ARRAY_TASK_ID --wandb_project_name=testing
