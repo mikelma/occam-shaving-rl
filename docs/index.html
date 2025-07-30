@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Occam Shaving (DLRL 2025)</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 40px auto;
+            max-width: 650px;
+            line-height: 1.6;
+            font-size: 18px;
+            color: #444;
+            padding: 0 10px
+        }
+        h1, h2, h3, h4, h5, h6 {
+            margin-bottom: 0;
+            line-height: 1.2;
+        }
+        .subtitle {
+            font-size: 1.25rem;
+            margin-top: 0;
+            font-weight: bold;
+        }
+        hr {
+            margin: 2em 0;
+        }
+        code {
+            background: #eee;
+            color: #275d38;
+            padding: 2px 4px;
+            margin: -2px 0;
+            border: 1px solid #999;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Occam Shaving <a href="#" style="font-size: 8px;" onclick="javascript:document.body.style.background = 'linear-gradient(green, blue)'; document.body.style.color = 'red'">Enable Speed</a></h1>
+        <p class="subtitle">Group Project for the DLRL 2025 Summer School</p>
+        By:
+        <ul>
+            <li>Mikel Malagón</li>
+            <li>Fahd Husain</li>
+            <li>Seth Akins</li>
+            <li>Mahvash Siavashpour</li>
+            <li>Paulius Sasnauskas</li>
+            <li>Kunal Samanta</li>
+        </ul>
+    </header>
+    <hr/>
+    <main>
+        <section>
+            <h2>Motivation</h2>
+            <time datetime="2025-07-28">July 28</time>
+            <p>
+                Frustrated by PPO, namely, why does it work, the sensitivity to hyperparameters, trust region value being 0.2 no matter what, and all the implementation details, we set out to figure out if it's possible to make this algorithm simpler.
+                We were inspired by <a href="https://iclr-blog-track.github.io/2022/03/25/ppo-implementation-details/">The 37 Implementation Details of PPO</a>, and wanted a more principled way of thinking about tricks and hyperparameters.
+            </p>
+        </section>
+        <section>
+            <h2>Setup</h2>
+            <time datetime="2025-07-28">July 28</time>
+            <p>
+                After looking through the 37 tricks, we devised our own list, with some high-level groupings of the tricks that made sense to us.
+                This resulted in a list of 12 tricks (in 5 categories):
+                <ul>
+                    <li>Normalization and clipping</li>
+                    <ul>
+                        <li>🮲🮳 [Mahvash] Normalization of the advantage estimates (remove? or change to symlog)</li>
+                        <li>🮲🮳 [Paulius] Surrogate objective clipping (remove?)</li>
+                        <li>🮲🮳 [Mikel] Value function clipping (remove?)</li>
+                        <li>🮲🮳 [Mahvash] Gradient clipping (remove?)</li>
+                    </ul>
+                    <li>Advantage Estimation</li>
+                    <ul>
+                        <li>🮲🮳 [Fahd] Change GAE to just advantage prediction</li>
+                    </ul>
+                    <li>Training setup</li>
+                    <ul>
+                        <li>🮲🮳 [Kunal] Use full batch instead of mini-batch</li>
+                    </ul>
+                    <li>Architecture</li>
+                    <ul>
+                        <li>🮲🮳 [Paulius] Check other weight initializations</li>
+                        <li>🮲🮳 [Mikel] Change the optimizer from Adam to Muon (or others)</li>
+                        <li>🮲🮳 [Mahvash] Adam LR scheduler (remove?)</li>
+                        <li>🮲🮳 [Seth] Use multiple heads (same backbone network)</li>
+                    </ul>
+                    <!-- <li>Policy Losses</li>
+                    <ul>
+                        <li>🮲🮳 [Mikel] Entropy bonus (remove?)</li>
+                    </ul> -->
+                    <li>Mujuco-specific</li>
+                    <ul>
+                        <!-- <li>Learn the covariance for the continuous actions predictor</li> -->
+                        <!-- <li>Try to use the same backbone for actor and critic</li> -->
+                        <li>🮲🮳 [Kunal] Observation clipping (remove?)</li>
+                        <li>🮲🮳 [Kunal] Reward scaling (replace with symlog)</li>
+                    </ul>
+                </ul>
+                We decided to use the PPO implementation from the <a href="https://github.com/vwxyzjn/cleanrl">CleanRL</a> GitHub repository, because it contains all the 37 tricks from the blog post.
+                We chose the <code>HalfCheetah-v4</code> environment for preliminary runs, with 10 experiment replications (seeds).
+            </p>
+        </section>
+        <section>
+            <h2>Baseline</h2>
+            <time datetime="2025-07-29">July 29</time>
+            <p>
+                We ran the baseline with the default hyperparameters from the CleanRL codebase:
+                <iframe src="https://wandb.ai/occam-shaving-rl/baselines/reports/Copy-of-paulius-s-Baseline--VmlldzoxMzc4NzY1MQ" style="border:none;height:786px;width:100%"></iframe>
+                This set the bar we'd have to meet for our other experiments.
+            </p>
+        </section>
+        <section>
+            <h2>Individual Ablations</h2>
+            <time datetime="2025-07-29">July 29</time>
+            <p>
+                We ran all different (first-order) changes from the list above:
+                <iframe src="https://wandb.ai/occam-shaving-rl/baselines/reports/Occam-shaving-RL--VmlldzoxMzc4NjU4NQ" style="border:none;height:1024px;width:100%"></iframe>
+            </p>
+        </section>
+        <hr/>
+        <section>
+            <h2>References</h2>
+            <ol>
+                <li id="cite-37-details">Huang, Shengyi, Rousslan Fernand Julien Dossa, Antonin Raffin, Anssi Kanervisto, and Weixun Wang. "The 37 implementation details of proximal policy optimization." The ICLR Blog Track 2023 (2022).</li>
+                <li id="cite-cleanrl">Huang, Shengyi, Rousslan Fernand Julien Dossa, Chang Ye, Jeff Braga, Dipam Chakraborty, Kinal Mehta, and João GM Araújo. "Cleanrl: High-quality single-file implementations of deep reinforcement learning algorithms." Journal of Machine Learning Research 23, no. 274 (2022): 1-18.</li>
+                <li id="cite-ppodetails">Andrychowicz, Marcin, Anton Raichuk, Piotr Stańczyk, Manu Orsini, Sertan Girgin, Raphaël Marinier, Leonard Hussenot et al. "What matters for on-policy deep actor-critic methods? a large-scale study." In International conference on learning representations. 2021.</li>
+            </ol>
+        </section>
+        <hr/>
+        <section>
+            <h2>Acknowledgements</h2>
+            <ul>
+                <li>Computational resources provided by Denvr Dataworks (sponsors of the DLRL 2025 Summer School at Amii) and Compute Canada (provided by students at the University of Alberta).</li>
+                <li>Website design inspiration from <a href="http://bettermotherfuckingwebsite.com/">http://bettermotherfuckingwebsite.com/</a>.</li>
+            </ul>
+        </section>
+    </main>
+</body>
+</html>
