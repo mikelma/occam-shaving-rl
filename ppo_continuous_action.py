@@ -17,7 +17,8 @@ from torch.utils.tensorboard import SummaryWriter
 
 from muon import SingleDeviceMuonWithAuxAdam
 
-WeightInitializations = Literal["cleanrl", "he", "xavier", "xavier_normal", "kaiming", "kaiming_normal"]
+WeightInitializations = Literal["cleanrl", "he",
+                                "xavier", "xavier_normal", "kaiming", "kaiming_normal"]
 
 
 @dataclass
@@ -142,19 +143,22 @@ def layer_init_xavier_normal(layer, gain=1.0, bias_const=0.0, **kwargs):
 
 
 def layer_init_kaiming(layer, mode="fan_in", nonlinearity="tanh", bias_const=0.0, **kwargs):
-    torch.nn.init.kaiming_uniform_(layer.weight, mode=mode, nonlinearity=nonlinearity)
+    torch.nn.init.kaiming_uniform_(
+        layer.weight, mode=mode, nonlinearity=nonlinearity)
     torch.nn.init.constant_(layer.bias, bias_const)
     return layer
 
 
 def layer_init_kaiming_normal(layer, mode="fan_in", nonlinearity="tanh", bias_const=0.0, **kwargs):
-    torch.nn.init.kaiming_normal_(layer.weight, mode=mode, nonlinearity=nonlinearity)
+    torch.nn.init.kaiming_normal_(
+        layer.weight, mode=mode, nonlinearity=nonlinearity)
     torch.nn.init.constant_(layer.bias, bias_const)
     return layer
 
 
 def layer_init_he(layer, mode="fan_in", bias_const=0.0, **kwargs):
-    torch.nn.init.kaiming_uniform_(layer.weight, mode=mode, nonlinearity="tanh")
+    torch.nn.init.kaiming_uniform_(
+        layer.weight, mode=mode, nonlinearity="tanh")
     torch.nn.init.constant_(layer.bias, bias_const)
     return layer
 
@@ -324,7 +328,8 @@ if __name__ == "__main__":
     layer_init = layer_inits[args.weight_initialization]
 
     if args.shared_network:
-        agent = SharedAgent(envs, args.hidden_size, layer_init=layer_init).to(device)
+        agent = SharedAgent(envs, args.hidden_size,
+                            layer_init=layer_init).to(device)
     else:
         agent = Agent(envs, args.hidden_size, layer_init=layer_init).to(device)
 
