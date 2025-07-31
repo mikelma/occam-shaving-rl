@@ -147,11 +147,19 @@
                                 fill.style.display = visible ? "" : "none";
                                 
                             });
+                            const linebox = document.createElement("div");
+                            linebox.style = `display: inline-block; width: 1em; height: 0.7em; margin: 0 0.4em; background: ${line.attributes.stroke.value}66; position: relative;`;
+                            const lineline = document.createElement("div");
+                            lineline.style = `display: inline-block; width: 1em; height: 0.1em; background: ${line.attributes.stroke.value};position: absolute;top: calc(50% - 0.05em);`;
+                            linebox.appendChild(lineline);
                             label.appendChild(checkbox);
+                            label.appendChild(linebox);
                             label.append(labels[i])
                             box.appendChild(label);
                         }
                     };
+                </script>
+                <script>
                     makeCheckboxes("firstorder", "firstorderbox", 10, ["Baseline", "Full-batch", "No gradient normalization" , "Muon optimizer" , "No LR scheduler", "No advantage normalization" , "Narrow policy std init", "No value clipping" , "Symlog reward scaling" , "Shared (backbone) network"]);
                 </script>
             </p>
@@ -256,6 +264,15 @@
                     </ul>
                 </ol>
             </p>
+            <p>
+                The results for this can be seen here:
+                <div style="display: flex; flex-direction: row;">
+                    <div id="combobox" style="display: flex; flex-direction: column; min-width: 100px; gap: 8px"></div>
+                </div>
+                <script>
+                    // makeCheckboxes("combobox", "comboboxbox", 2, ["Baseline", "Full-batch"]);
+                </script>
+            </p>
         </section>
         <hr/>
         <section>
@@ -273,6 +290,7 @@
                 <li>Computational resources provided by Denvr Dataworks (sponsors of the DLRL 2025 Summer School at Amii) and Compute Canada (provided by students at the University of Alberta).</li>
                 <li>Website design inspiration from <a href="http://bettermotherfuckingwebsite.com/">http://bettermotherfuckingwebsite.com/</a>.</li>
                 <li>We acknowledge the existence of <a href="https://en.wikipedia.org/wiki/Medicine_Hat">Medicine Hat</a>, where one of our Obi-Wan teammates is originally from.</li>
+                <li>In solidarity with one of our teammates not having an appendix, we will also not be providing one.</li>
             </ul>
         </section>
     </main>
