@@ -7,6 +7,7 @@
 # ]
 # ///
 
+import xml.etree.ElementTree as ET
 from typing import Any
 
 import matplotlib.pyplot as plt
@@ -48,7 +49,7 @@ def makefig() -> tuple[Figure, Axes]:
     plt.rcParams["svg.fonttype"] = "none"
     plt.rcParams["font.family"] = "Latin Modern Math"
 
-    fig, ax = plt.subplots(1, 1)
+    fig, ax = plt.subplots(1, 1, figsize=(5, 5))
 
     ax.set_box_aspect(1)
     ax.grid(alpha=0.15)
@@ -67,7 +68,7 @@ def plot_mean_stat(fig: Figure, ax: Axes, steps: np.ndarray, mean: np.ndarray, s
         ax.fill_between(steps, stat[0], stat[1], color=plotted[0].get_color(), alpha=0.1)
 
 
-def save_plot(fig: Figure, file: str, show_legend: bool):
+def save_plot(fig: Figure, file: str, show_legend: bool) -> str:
     if show_legend:
         legend = plt.gca().legend(loc="upper left", bbox_to_anchor=(1.02, 1), borderaxespad=0, fancybox=False, edgecolor="black")
         lines = legend.get_lines()
@@ -83,12 +84,36 @@ def save_plot(fig: Figure, file: str, show_legend: bool):
             decoration.set_clip_path(line.get_clip_path())
             decoration.set_clip_box(line.get_clip_box())
 
-    savename = file.replace(".csv", ".svg")
-    fig.savefig(savename)
-    print(f"Saved to '{savename}'.")
+    fig.savefig(file)
+    print(f"Saved to '{file}'.")
+
+    return file
 
 
-def main(legend: bool, pairs: list[tuple[str, str]]):
+def remove_svg_element_and_resize(file: str, element_id: str):
+    tree = ET.parse(file)
+    root = tree.getroot()
+
+    element_to_remove = root.find(f".//*[@id='{element_id}']")
+    if element_to_remove is None:
+        print(f"Element with id '{element_id}' not found")
+        return
+    parent = root.find(f".//*[{element_id}]/..")
+    if parent is None:
+        for elem in root.iter():
+            if element_to_remove in elem:
+                elem.remove(element_to_remove)
+                break
+    else:
+        parent.remove(element_to_remove)
+
+    del root.attrib["viewBox"]
+    # root.set("viewBox", "")
+
+    tree.write(file, encoding="utf-8", xml_declaration=True)
+
+
+def main(legend: bool, pairs: list[tuple[str, str]], output: str):
     fig, ax = makefig()
 
     for file, label in pairs:
@@ -97,7 +122,8 @@ def main(legend: bool, pairs: list[tuple[str, str]]):
         steps, mean, stat, stattype = get_mean_stat(runs)
         plot_mean_stat(fig, ax, steps, mean, stat, stattype, label=label)
 
-    save_plot(fig, file, legend)
+    filename = save_plot(fig, output, legend)
+    # remove_svg_element_and_resize(filename, "patch_1")
 
 
 if __name__ == "__main__":
@@ -105,6 +131,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--legend", action="store_true", default=False)
+    parser.add_argument("--output", required=True, type=str)
     parser.add_argument("pairs", nargs="+")
     args = vars(parser.parse_args())
 
