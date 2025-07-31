@@ -22,13 +22,19 @@ def load_csv(file: str) -> pd.DataFrame:
     return pd.read_csv(file)
 
 
-def parse_data(data: pd.DataFrame) -> tuple[np.ndarray, np.ndarray]:
-    steps = data["Step"].to_numpy()
+def parse_data(data: pd.DataFrame, useglobalstep: bool) -> tuple[np.ndarray, np.ndarray]:
+    steps = data["Step"].to_numpy() if not useglobalstep else data["global_step"].to_numpy()
     coldata = []
     for colname in reversed(data.columns.to_list()):
-        if colname == "Step" or colname.endswith("__MIN") or colname.endswith("__MAX"):
+        if colname in ["Step", "global_step"] or colname.endswith("__MIN") or colname.endswith("__MAX") or colname.endswith("_step"):
             continue
         coldata.append(data[colname].to_numpy())
+
+    if useglobalstep:
+        for col in coldata:
+            nonzerofirst = lambda z: z.nonzero()[0]
+            colnan = np.isnan(col)
+            col[colnan] = np.interp(nonzerofirst(colnan), nonzerofirst(~colnan), col[~colnan])
 
     return steps, np.asarray(coldata)
 
@@ -55,6 +61,7 @@ def makefig() -> tuple[Figure, Axes]:
     ax.grid(alpha=0.15)
     ax.set_xlabel("t")
     ax.set_ylabel("R")
+    ax.ticklabel_format(useOffset=False, style="plain")
 
     fig.set_dpi(150)
     fig.tight_layout()
@@ -113,12 +120,12 @@ def remove_svg_element_and_resize(file: str, element_id: str):
     tree.write(file, encoding="utf-8", xml_declaration=True)
 
 
-def main(legend: bool, pairs: list[tuple[str, str]], output: str):
+def main(legend: bool, pairs: list[tuple[str, str]], output: str, useglobalstep: bool):
     fig, ax = makefig()
 
     for file, label in pairs:
         data = load_csv(file)
-        runs = parse_data(data)
+        runs = parse_data(data, useglobalstep)
         steps, mean, stat, stattype = get_mean_stat(runs)
         plot_mean_stat(fig, ax, steps, mean, stat, stattype, label=label)
 
@@ -132,6 +139,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--legend", action="store_true", default=False)
     parser.add_argument("--output", required=True, type=str)
+    parser.add_argument("--useglobalstep", action="store_true", default=False)
     parser.add_argument("pairs", nargs="+")
     args = vars(parser.parse_args())
 
