@@ -25,4 +25,7 @@ uv run plot.py data/baseline.csv "Baseline" data/combo1.csv "Combo 1" data/combo
 
 # Ant runs
 uv run plot.py data/ant_baseline.csv "Baseline" data/ant_combo8.csv "Combo 8" data/ant_muon.csv "Muon" data/ant_cocombowowombo.csv "Cocombo Wowombo" --output docs/img/ant.svg --useglobalstep
+
+# Humanoid runs
+uv run plot.py data/humanoid_baseline.csv "Baseline" data/humanoid_muon.csv "Muon" data/humanoid_cocombo.csv "Cocombo" --output docs/img/humanoid.svg --useglobalstep
 ```
