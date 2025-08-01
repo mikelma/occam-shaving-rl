@@ -408,12 +408,13 @@
                 Conclusions:
                 <ul>
                     <li>It seems all 37 tricks are kind of necessary to achieve satisfactory performance with PPO. <b>We wasted a bunch of time!</b></li>
-                    <li>If anything, we added a few hyperparameters (Muon optimizer, symlog reward clipping) to make it work better.</li>
+                    <li>But in reality, not all the tricks are required for environments; you can remove many tricks and this gives as good or similar performance as the baseline, but you need to be careful (just adding 0.05 to the GAE lambda parameter <emph>destroys</emph> performance). <b>It's hard!</b></li>
+                    <li>(But we also added a few hyperparameters (Muon optimizer, symlog reward clipping) to make it work better.)</li>
                 </ul>
                 <br/>
                 Statistics:
                 <ul>
-                    <li>294 experiment runs</li>
+                    <li>373 experiment runs</li>
                     <li>5 days of fooling around</li>
                     <li>6 glorious memes produced</li>
                     <li>3 cheap easter eggs / jokes hidden in the website</li>
