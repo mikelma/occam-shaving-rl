@@ -14,6 +14,7 @@ import torch.optim as optim
 import tyro
 from torch.distributions.normal import Normal
 from torch.utils.tensorboard import SummaryWriter
+import math
 
 from muon import SingleDeviceMuonWithAuxAdam
 
@@ -91,6 +92,8 @@ class Args:
     """whether to do gradient normalization"""
     symlog: bool = False
     """whether to use symlog for reward transform (clipping) or not"""
+    cosine_anneal: bool = False
+    """whether to use cosine annealing for the learning rate"""
 
     # to be filled in runtime
     batch_size: int = 0
@@ -397,6 +400,12 @@ if __name__ == "__main__":
                 frac = 1.0 - (iteration - 1.0) / args.num_iterations
                 lrnow = frac * args.learning_rate
                 optimizer.param_groups[0]["lr"] = lrnow
+
+        if args.cosine_anneal:
+            min_learning_rate = 1e-10 
+            cosine_decay = 0.5 * (1 + math.cos(math.pi * (iteration - 1) / args.num_iterations))
+            lrnow = min_learning_rate + cosine_decay * (args.learning_rate - min_learning_rate)
+            optimizer.param_groups[0]["lr"] = lrnow
 
         for step in range(0, args.num_steps):
             global_step += args.num_envs
