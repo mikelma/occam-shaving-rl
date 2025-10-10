@@ -387,9 +387,16 @@ if __name__ == "__main__":
     for iteration in range(1, args.num_iterations + 1):
         # Annealing the rate if instructed to do so.
         if args.anneal_lr:
-            frac = 1.0 - (iteration - 1.0) / args.num_iterations
-            lrnow = frac * args.learning_rate
-            optimizer.param_groups[0]["lr"] = lrnow
+            if args.muon:
+                for i, opt in enumerate(optimizer.param_groups):
+                    frac = 1.0 - (iteration - 1.0) / args.num_iterations
+                    lrnow = frac * param_groups[i]["lr"]
+                    optimizer.param_groups[0]["lr"] = lrnow
+
+            else:
+                frac = 1.0 - (iteration - 1.0) / args.num_iterations
+                lrnow = frac * args.learning_rate
+                optimizer.param_groups[0]["lr"] = lrnow
 
         for step in range(0, args.num_steps):
             global_step += args.num_envs
