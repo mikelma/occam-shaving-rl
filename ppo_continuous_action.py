@@ -367,7 +367,7 @@ if __name__ == "__main__":
         "SPLIT_AC": True,
         "HIDDEN_DIM": 256,
         "USE_MUON": True,
-        "INITIALIZERS": {"shared": orthogonal(jnp.sqrt(2)), "actor": orthogonal(0.01), "critic": orthogonal(1)}
+        "INITIALIZERS": {"shared": orthogonal(jnp.sqrt(2)), "actor": orthogonal(0.01), "critic": orthogonal(1)},
         "NUM_PARALLEL_RUNS": 8,
     }
     rng = jax.random.PRNGKey(30)
