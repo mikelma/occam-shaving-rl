@@ -217,3 +217,4 @@ __marimo__/
 runs/*
 wandb/*
 *.out
+.idea
