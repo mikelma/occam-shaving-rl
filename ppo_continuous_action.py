@@ -7,6 +7,7 @@ from flax.linen.initializers import constant, orthogonal
 from typing import Sequence, NamedTuple, Callable
 from flax.training.train_state import TrainState
 import distrax
+import pickle
 from purejaxrl.purejaxrl.wrappers import (
     LogWrapper,
     BraxGymnaxWrapper,
@@ -368,9 +369,11 @@ if __name__ == "__main__":
         "HIDDEN_DIM": 256,
         "USE_MUON": True,
         "INITIALIZERS": {"shared": orthogonal(jnp.sqrt(2)), "actor": orthogonal(0.01), "critic": orthogonal(1)},
-        "NUM_PARALLEL_RUNS": 8,
+        "NUM_PARALLEL_RUNS": 30,
     }
-    rng = jax.random.PRNGKey(30)
+    rng = jax.random.PRNGKey(1)
     keys = jax.random.split(rng, num=config["NUM_PARALLEL_RUNS"])
-    train_jit_vmap = jax.vmap(make_train(config))
-    out = train_jit_vmap(keys)
+    train_jit_vmap = jax.jit(jax.vmap(make_train(config)))
+    out = jax.block_until_ready(train_jit_vmap(keys))
+    with open("output.pkl", "wb") as f:
+        pickle.dump(out["metrics"], f)
