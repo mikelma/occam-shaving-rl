@@ -1088,6 +1088,7 @@ dependencies = [
     { name = "navix" },
     { name = "numpy" },
     { name = "optax" },
+    { name = "tyro" },
 ]
 
 [package.metadata]
@@ -1100,6 +1101,7 @@ requires-dist = [
     { name = "navix", specifier = ">=0.7.4" },
     { name = "numpy", specifier = ">=2.3.3" },
     { name = "optax", specifier = ">=0.2.6" },
+    { name = "tyro", specifier = ">=0.9.33" },
 ]
 
 [[package]]

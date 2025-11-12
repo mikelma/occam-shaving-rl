@@ -13,4 +13,5 @@ dependencies = [
  "navix>=0.7.4",
  "numpy>=2.3.3",
  "optax>=0.2.6",
+ "tyro>=0.9.33",
 ]

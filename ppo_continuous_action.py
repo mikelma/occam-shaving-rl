@@ -1,13 +1,16 @@
 import jax
 import jax.numpy as jnp
 import flax.linen as nn
-import numpy as np
 import optax
 from flax.linen.initializers import constant, orthogonal
 from typing import Sequence, NamedTuple, Callable
 from flax.training.train_state import TrainState
 import distrax
 import pickle
+import tyro
+import copy
+from dataclasses import dataclass
+from generate_configs import generate_config, make_initializers
 from purejaxrl.purejaxrl.wrappers import (
     LogWrapper,
     BraxGymnaxWrapper,
@@ -16,6 +19,15 @@ from purejaxrl.purejaxrl.wrappers import (
     NormalizeVecReward,
     ClipAction,
 )
+
+
+@dataclass
+class Args:
+    id: int = 0
+    """Experiment's ID (and seed)"""
+
+    conf_key: str = "hopper"
+    """Meta configuration key"""
 
 
 class SplitActorCritic(nn.Module):
@@ -345,35 +357,17 @@ def make_train(config):
 
 
 if __name__ == "__main__":
-    config = {
-        "LR": 3e-4,
-        "NUM_ENVS": 2048,
-        "NUM_STEPS": 10,
-        "TOTAL_TIMESTEPS": 5e7,
-        "UPDATE_EPOCHS": 4,
-        "NUM_MINIBATCHES": 32,
-        "GAMMA": 0.99,
-        "GAE_LAMBDA": 0.95,
-        "CLIP_EPS": 0.2,
-        "CLIP_VALUE_EPS": 0.2,
-        "ENT_COEF": 0.0,
-        "VF_COEF": 0.5,
-        "MAX_GRAD_NORM": 0.5,
-        "ACTIVATION": "tanh",
-        "ENV_NAME": "hopper",
-        "ANNEAL_LR": False,
-        "NORMALIZE_ENV": True,
-        "DEBUG": True,
-        "GAE_NORMALIZATION": False,
-        "SPLIT_AC": True,
-        "HIDDEN_DIM": 256,
-        "USE_MUON": True,
-        "INITIALIZERS": {"shared": orthogonal(jnp.sqrt(2)), "actor": orthogonal(0.01), "critic": orthogonal(1)},
-        "NUM_PARALLEL_RUNS": 30,
-    }
-    rng = jax.random.PRNGKey(1)
+    args = tyro.cli(Args)
+
+    config_readable = generate_config(cfg_key=args.conf_key, id=args.id)
+    config = copy.deepcopy(config_readable)
+    config["INITIALIZERS"] = make_initializers(config_readable["INITIALIZERS"])
+    print(config)
+
+    rng = jax.random.PRNGKey(args.id)
     keys = jax.random.split(rng, num=config["NUM_PARALLEL_RUNS"])
     train_jit_vmap = jax.jit(jax.vmap(make_train(config)))
     out = jax.block_until_ready(train_jit_vmap(keys))
-    with open("output.pkl", "wb") as f:
+
+    with open(f"output_{args.conf_key}__{args.id}.pkl", "wb") as f:
         pickle.dump(out["metrics"], f)
