@@ -10,6 +10,7 @@ dependencies = [
  "flax>=0.12.0",
  "gymnax>=0.0.9",
  "jax>=0.7.2",
+ "msgpack>=1.1.2",
  "navix>=0.7.4",
  "numpy>=2.3.3",
  "optax>=0.2.6",

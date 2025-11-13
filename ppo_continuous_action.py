@@ -10,7 +10,7 @@ import pickle
 import tyro
 import copy
 from dataclasses import dataclass
-from generate_configs import generate_config, make_initializers
+import msgpack
 from purejaxrl.purejaxrl.wrappers import (
     LogWrapper,
     BraxGymnaxWrapper,
@@ -26,8 +26,21 @@ class Args:
     id: int = 0
     """Experiment's ID (and seed)"""
 
-    conf_key: str = "hopper"
-    """Meta configuration key"""
+    confs: str = "configs.bin"
+    """Meta configuration file path"""
+
+
+def make_initializers(specification):
+    inits = {}
+    for layer, method_lst in specification.items():
+        method = method_lst[0]
+        if method == "orthogonal":
+            inits[layer] = orthogonal(method_lst[1])
+        elif method == "glorot_u":
+            inits[layer] = glorot_uniform()
+        else:
+            raise NotImplementedError(f"Weight initializer '{method}' not implemented")
+    return inits
 
 
 class SplitActorCritic(nn.Module):
@@ -359,7 +372,13 @@ def make_train(config):
 if __name__ == "__main__":
     args = tyro.cli(Args)
 
-    config_readable = generate_config(cfg_key=args.conf_key, id=args.id)
+    f = open(args.confs, 'rb')
+    bin = f.read()
+    f.close()
+    configs = msgpack.unpackb(bin, raw=False)
+
+    config_readable = configs[args.id]
+
     config = copy.deepcopy(config_readable)
     config["INITIALIZERS"] = make_initializers(config_readable["INITIALIZERS"])
     print(config)

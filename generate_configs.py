@@ -1,21 +1,8 @@
-from flax.linen.initializers import glorot_uniform, orthogonal
 import tyro
 import itertools
 from config import META_CONFIG
 import pprint
-
-
-def make_initializers(specification):
-    inits = {}
-    for layer, method_lst in specification.items():
-        method = method_lst[0]
-        if method == "orthogonal":
-            inits[layer] = orthogonal(method_lst[1])
-        elif method == "glorot_u":
-            inits[layer] = glorot_uniform()
-        else:
-            raise NotImplementedError(f"Weight initializer '{method}' not implemented")
-    return inits
+import msgpack
 
 
 def num_configurations(config):
@@ -57,5 +44,23 @@ def generate_config(cfg_key: str = "hopper", id: int = 0, verbose: bool = True):
 
     return cfg
 
+def configs_to_bin(cfg_key: str = "hopper", out_path: str = "configs.bin"):
+    cfg_key: str = "hopper"
+
+    cfgs = META_CONFIG[cfg_key]
+    total_num = num_configurations(cfgs)
+
+    print(f"Generating all {total_num} configurations...")
+
+    all_configs = generate_all_configs(cfgs)
+
+    input("> Press any key to continue...")
+
+    bin_data = msgpack.packb(all_configs, use_bin_type=True)
+    with open(out_path, "wb") as binary_file:
+        binary_file.write(bin_data)
+
+
 if __name__ == "__main__":
-    tyro.cli(generate_config)
+    # tyro.cli(generate_config)
+    tyro.cli(configs_to_bin)
