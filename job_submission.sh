@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --account=rrg-mbowling-ad
 #SBATCH --cpus-per-task=4
-#SBATCH --gpus=nvidia_h100_80gb_hbm3_1g.10gb:1
+#SBATCH --gpus=nvidia_h100_80gb_hbm3_3g.40gb:1
 #SBATCH --mem=16000M
 #SBATCH --time=02:59:00
 #SBATCH --output=job_testing/job_testing_%A_%a.out
