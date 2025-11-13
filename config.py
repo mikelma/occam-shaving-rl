@@ -12,15 +12,15 @@ META_CONFIG = {
         "NUM_PARALLEL_RUNS": 30,
         "VF_COEF": 0.5,
         "NUM_STEPS": 10,
-        "TOTAL_TIMESTEPS": 5e7,
+        "TOTAL_TIMESTEPS": 1e6,
         "USE_MUON": False,
+        "GAMMA": 0.99,
 
         # variables
         "LR": [1e-4, 3e-4, 1e-5],
         "NUM_ENVS": [512, 1024, 2048],
         "UPDATE_EPOCHS": [1, 4],
         "NUM_MINIBATCHES": [8, 16, 32, 64],
-        "GAMMA": [0.9, 0.95, 0.99],
         "GAE_LAMBDA": [0.95, 1],  # on / off
         "CLIP_EPS": [0.2, 1e6],  # on / off
         "CLIP_VALUE_EPS": [0.2, 1e6],  # on / off
