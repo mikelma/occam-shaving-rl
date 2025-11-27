@@ -6,7 +6,7 @@
 #SBATCH --time=8:59:00
 #SBATCH --output=ppo_atari/ppo_atari_%A_%a.out
 
-module load python/3.12 mujoco/3.3.0
+module load python/3.12
 
 virtualenv --no-download $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
