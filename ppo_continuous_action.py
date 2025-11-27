@@ -2,7 +2,7 @@ import jax
 import jax.numpy as jnp
 import flax.linen as nn
 import optax
-from flax.linen.initializers import constant, orthogonal
+from flax.linen.initializers import constant, orthogonal, glorot_uniform
 from typing import Sequence, NamedTuple, Callable
 from flax.training.train_state import TrainState
 import distrax
@@ -51,6 +51,7 @@ class SplitActorCritic(nn.Module):
     action_dim: Sequence[int]
     activation: str = "tanh"
     hidden_dim: int = 256
+    layer_norm: bool = False
 
     @nn.compact
     def __call__(self, x):
@@ -62,10 +63,16 @@ class SplitActorCritic(nn.Module):
             self.hidden_dim, kernel_init=self.initializers["shared"], bias_init=constant(0.0)
         )(x)
         actor_mean = activation(actor_mean)
+        if self.layer_norm:
+            actor_mean = nn.LayerNorm()(actor_mean)
+
         actor_mean = nn.Dense(
             self.hidden_dim, kernel_init=self.initializers["shared"], bias_init=constant(0.0)
         )(actor_mean)
         actor_mean = activation(actor_mean)
+        if self.layer_norm:
+            actor_mean = nn.LayerNorm()(actor_mean)
+
         actor_mean = nn.Dense(
             self.action_dim, kernel_init=self.initializers["actor"], bias_init=constant(0.0)
         )(actor_mean)
@@ -76,10 +83,16 @@ class SplitActorCritic(nn.Module):
             self.hidden_dim, kernel_init=self.initializers["shared"], bias_init=constant(0.0)
         )(x)
         critic = activation(critic)
+        if self.layer_norm:
+            critic = nn.LayerNorm()(critic)
+
         critic = nn.Dense(
             self.hidden_dim, kernel_init=self.initializers["shared"], bias_init=constant(0.0)
         )(critic)
         critic = activation(critic)
+        if self.layer_norm:
+            critic = nn.LayerNorm()(critic)
+
         critic = nn.Dense(1, kernel_init=self.initializers["critic"], bias_init=constant(0.0))(
             critic
         )
@@ -91,6 +104,7 @@ class CombinedActorCritic(nn.Module):
     action_dim: Sequence[int]
     activation: str = "tanh"
     hidden_dim: int = 256
+    layer_norm: bool = False
 
     @nn.compact
     def __call__(self, x):
@@ -103,10 +117,17 @@ class CombinedActorCritic(nn.Module):
             self.hidden_dim, kernel_init=self.initializers["shared"], bias_init=constant(0.0)
         )(x)
         shared_mean = activation(shared_mean)
+
+        if self.layer_norm:
+            shared_mean = nn.LayerNorm()(shared_mean)
+
         shared_mean = nn.Dense(
             self.hidden_dim, kernel_init=self.initializers["shared"], bias_init=constant(0.0)
         )(shared_mean)
         shared_mean = activation(shared_mean)
+
+        if self.layer_norm:
+            shared_mean = nn.LayerNorm()(shared_mean)
 
         actor_mean = nn.Dense(
             self.action_dim, kernel_init=self.initializers["actor"], bias_init=constant(0.0)
@@ -163,7 +184,7 @@ def make_train(config):
                 env.action_space(env_params).shape[0],
                 activation=config["ACTIVATION"],
                 hidden_dim=config["HIDDEN_DIM"],
-
+                layer_norm=config["LAYER_NORM"],
             )
         else:
             network = CombinedActorCritic(
@@ -171,6 +192,7 @@ def make_train(config):
                 env.action_space(env_params).shape[0],
                 activation=config["ACTIVATION"],
                 hidden_dim=config["HIDDEN_DIM"],
+                layer_norm=config["LAYER_NORM"],
             )
         rng, _rng = jax.random.split(rng)
         init_x = jnp.zeros(env.observation_space(env_params).shape)
