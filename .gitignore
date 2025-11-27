@@ -219,3 +219,5 @@ runs/*
 wandb/*
 *.out
 .idea
+scratch
+testing.ipynb
