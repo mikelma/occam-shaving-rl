@@ -2,7 +2,7 @@ import jax
 import jax.numpy as jnp
 import flax.linen as nn
 import optax
-from flax.linen.initializers import constant, orthogonal
+from flax.linen.initializers import constant, orthogonal, glorot_uniform
 from typing import Sequence, NamedTuple, Callable
 from flax.training.train_state import TrainState
 import distrax
