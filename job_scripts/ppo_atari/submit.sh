@@ -12,7 +12,5 @@ virtualenv $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
 python -m pip install  --upgrade pip
 
-python -m pip install -r requirements/requirements-envpool.txt
-python -m pip install -r requirements/requirements-jax.txt
-python -m pip install --upgrade "jax[cuda]==0.3.17" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
+python -m pip install -r requirements/requirements-atari-ppo-compute-canada.txt
 python cleanrl/ppo_atari_envpool_xla_jax_scan.py --env-id Breakout-v5
