@@ -3,14 +3,14 @@
 #SBATCH --cpus-per-task=8
 #SBATCH --gpus=nvidia_h100_80gb_hbm3_3g.40gb:1
 #SBATCH --mem=32000M
-#SBATCH --time=8:59:00
+#SBATCH --time=2:59:00
 #SBATCH --output=ppo_atari/ppo_atari_%A_%a.out
 
-module load python/3.12
+module load python/3.10 cuda
 
-virtualenv --no-download $SLURM_TMPDIR/env
+virtualenv $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
-python -m pip install --no-index --upgrade pip
+python -m pip install  --upgrade pip
 
 python -m pip install -r requirements/requirements-envpool.txt
 python -m pip install -r requirements/requirements-jax.txt
