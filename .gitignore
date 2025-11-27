@@ -214,7 +214,6 @@ __marimo__/
 
 
 
-*.sh
 runs/*
 wandb/*
 *.out
