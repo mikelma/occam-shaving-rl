@@ -15,7 +15,7 @@ For discrete environments (from ALE's evaluation environments):
 - Seaquest
 - Space Invaders
 
-We use 5M timesteps for all continuous control environments and 10M for Atari games. -Finally, we run 30 seeds per PPO configuration in each environment
+We use 1M timesteps for all continuous control environments and 10M for Atari games. -Finally, we run 30 seeds per PPO configuration in each environment
 
 
 ## Getting started
