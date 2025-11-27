@@ -1,6 +1,23 @@
 # Occam shaving RL 🪒
 
 
+## The benchmarks
+
+For continuous control:
+
+- Walker2D
+- Ant
+- Humanoid
+
+For discrete environments (from ALE's evaluation environments):
+
+- Asterix 
+- Seaquest
+- Space Invaders
+
+We use 1M timesteps for all continuous control environments and 10M for Atari games. -Finally, we run 30 seeds per PPO configuration in each environment
+
+
 ## Getting started
 
 Just install [uv](https://docs.astral.sh/uv/) and run the following commands in the repo's directory.
