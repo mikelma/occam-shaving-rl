@@ -6,7 +6,7 @@
 #SBATCH --output=ppo_mujoco/cpu/ppo_mujoco_cpu_%A_%a.out
 #SBATCH --array=0-2
 
-module load python/3.12 mujoco/3.3.0 glfw/3.3.2
+module load python/3.12 mujoco/3.3.0
 
 virtualenv --no-download $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
