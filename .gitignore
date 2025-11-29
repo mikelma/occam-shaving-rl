@@ -214,8 +214,9 @@ __marimo__/
 
 
 
-*.sh
 runs/*
 wandb/*
 *.out
 .idea
+scratch
+testing.ipynb

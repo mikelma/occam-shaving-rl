@@ -49,5 +49,38 @@ META_CONFIG = {
             #     "critic": ["glorot_u"],
             # },
         ],
+    },
+    "mujoco_baseline": {
+        # constants
+        "ENV_NAME": ["ant", "humanoid", "walker2d"],
+        "DEBUG": False,
+        "NUM_PARALLEL_RUNS": 30,
+        "VF_COEF": 0.5,
+        "NUM_STEPS": 10,
+        "TOTAL_TIMESTEPS": 1e6,
+        "USE_MUON": False,
+        "GAMMA": 0.99,
+        "LR": 3e-4,
+        "NUM_ENVS": 2048,
+        "UPDATE_EPOCHS": 4,
+        "NUM_MINIBATCHES": 32,
+        "GAE_LAMBDA": 0.95,
+        "CLIP_EPS": 0.2,
+        "CLIP_VALUE_EPS": 0.2,
+        "ENT_COEF": 0.0,
+        "MAX_GRAD_NORM": 0.5,
+        "ACTIVATION": "tanh",
+        "ANNEAL_LR": False,
+        "NORMALIZE_ENV": True,
+        "GAE_NORMALIZATION": True,
+        "SPLIT_AC": False,
+        "HIDDEN_DIM": 256,
+        "INITIALIZERS": [
+            {
+                "shared": ["orthogonal", np.sqrt(2)],
+                "actor": ["orthogonal", 0.01],
+                "critic": ["orthogonal", 1],
+            },
+        ],
     }
 }

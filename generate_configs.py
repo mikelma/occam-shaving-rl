@@ -45,8 +45,6 @@ def generate_config(cfg_key: str = "hopper", id: int = 0, verbose: bool = True):
     return cfg
 
 def configs_to_bin(cfg_key: str = "hopper", out_path: str = "configs.bin"):
-    cfg_key: str = "hopper"
-
     cfgs = META_CONFIG[cfg_key]
     total_num = num_configurations(cfgs)
 
