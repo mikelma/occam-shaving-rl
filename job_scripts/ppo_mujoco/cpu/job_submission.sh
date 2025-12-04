@@ -15,5 +15,5 @@ python -m pip install --no-index --upgrade pip
 mkdir $SLURM_TMPDIR/wheels
 python -m pip download -d $SLURM_TMPDIR/wheels --no-deps flashbax navix rlax==0.1.6
 
-python -m pip install -U --no-index --find-links $SLURM_TMPDIR/wheels/ -r requirements/ppo_mujoco/cpu/ppo_mujoco_compute_canada_requirements.txt
+python -m pip install --no-index --find-links $SLURM_TMPDIR/wheels/ -r requirements/ppo_mujoco/cpu/ppo_mujoco_compute_canada_requirements.txt
 python ppo_continuous_action.py --id ${SLURM_ARRAY_TASK_ID} --confs "mujoco_baseline_config.bin" --out_dir "outputs/mujoco_baselines/config_${SLURM_ARRAY_TASK_ID}"

@@ -37,7 +37,6 @@ fsspec==2025.10.0+computecanada
 gast==0.6.0+computecanada
 gitdb==4.0.12+computecanada
 gitpython==3.1.45+computecanada
-glfw @ file:///tmp/ebuser/avx512/GLFW/3.4/GCCcore-12.3-gentoo/glfw/glfw-2.8.0
 gym==0.26.2+computecanada
 gym_notices==0.0.8+computecanada
 gymnasium==1.1.1+computecanada
@@ -70,7 +69,6 @@ ml_collections==1.1.0+computecanada
 ml_dtypes==0.5.1+computecanada
 mpmath==1.3.0+computecanada
 msgpack==1.1.2+computecanada
-mujoco @ file:///tmp/ebuser/avx512/MuJoCo/3.3.0/GCCcore-12.3-gentoo/mujoco/mujoco-3.3.0
 mujoco_mjx==3.3.0+computecanada
 mypy_extensions==1.1.0+computecanada
 Navix==0.7.4
