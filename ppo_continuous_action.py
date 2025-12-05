@@ -11,6 +11,7 @@ import tyro
 import copy
 from dataclasses import dataclass
 import msgpack
+import os
 from purejaxrl.purejaxrl.wrappers import (
     LogWrapper,
     BraxGymnaxWrapper,
@@ -381,7 +382,7 @@ if __name__ == "__main__":
     configs = msgpack.unpackb(bin, raw=False)
 
     config_readable = configs[args.id]
-
+    os.makedirs(f"{args.out_dir}", exist_ok=True)
     config = copy.deepcopy(config_readable)
     config["INITIALIZERS"] = make_initializers(config_readable["INITIALIZERS"])
     print(config)
