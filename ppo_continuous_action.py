@@ -391,5 +391,5 @@ if __name__ == "__main__":
     train_jit_vmap = jax.jit(jax.vmap(make_train(config)))
     out = jax.block_until_ready(train_jit_vmap(keys))
 
-    with open(f"{args.out_dir}/output_{args.conf_key}__{args.id}.pkl", "wb") as f:
+    with open(f"{args.out_dir}/output__{args.id}.pkl", "wb") as f:
         pickle.dump(out["metrics"], f)
