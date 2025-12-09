@@ -6,7 +6,7 @@
 #SBATCH --time=8:59:00
 #SBATCH --output=ppo_atari/ppo_atari_%A_%a.out
 
-module load python/3.10 cuda
+module load python/3.10 cuda opencv/4.10 swig/4.1
 
 virtualenv $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
