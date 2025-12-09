@@ -23,8 +23,10 @@ We use 1M timesteps for all continuous control environments and 10M for Atari ga
 Just install [uv](https://docs.astral.sh/uv/) and run the following commands in the repo's directory.
 ```bash
 uv sync
-uv run <name-of-the-script>
+uv run --group <brax-or-atari> <name-of-the-script>
 ```
+
+Use the group `brax` for the continuous control experiments and `atari` for the Atari ones.
 
 
 ## Plotting

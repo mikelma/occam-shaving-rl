@@ -3,8 +3,13 @@ name = "occam-shaving-rl"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.11"
 dependencies = [
+ "tyro>=0.9.33",
+]
+
+[dependency-groups]
+brax = [
  "brax>=0.13.0",
  "distrax>=0.1.7",
  "flax>=0.12.0",
@@ -14,5 +19,23 @@ dependencies = [
  "navix>=0.7.4",
  "numpy>=2.3.3",
  "optax>=0.2.6",
- "tyro>=0.9.33",
+]
+atari = [
+ "jax==0.4.8",
+ "jaxlib==0.4.7",
+ "numpy==1.24.4",
+ "optax==0.1.4",
+ "envpool",
+ "scipy<1.13.0",
+ "flax",
+ "tensorboard>=2.20.0",
+ "gym==0.23.1",
+]
+
+[tool.uv]
+conflicts = [
+    [
+      { group = "brax" },
+      { group = "atari" },
+    ],
 ]
