@@ -31,8 +31,15 @@ os.environ["TF_XLA_FLAGS"] = (
 os.environ["TF_CUDNN DETERMINISTIC"] = "1"
 
 
+class Updateable(object):
+    def update(self, new):
+        for key, value in new.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
+
+
 @dataclass
-class Args:
+class Args(Updateable):
     exp_name: str = os.path.basename(__file__)[: -len(".py")]
     """the name of this experiment"""
     seed: int = 1
@@ -59,7 +66,7 @@ class Args:
     id: int = 0
     """Experiment's ID (and seed)"""
 
-    confs: str = "configs.bin"
+    confs: str = "atari_configs.bin"
     """Meta configuration file path"""
 
     # Algorithm specific arguments
@@ -97,6 +104,8 @@ class Args:
     """the maximum norm for the gradient clipping"""
     target_kl: float = None
     """the target KL divergence threshold"""
+    layer_norm: bool = False
+    """apply layer norm in every layer"""
 
     # to be filled in runtime
     batch_size: int = 0
@@ -127,6 +136,8 @@ def make_env(env_id, seed, num_envs):
 
 
 class Network(nn.Module):
+    layer_norm: bool = False
+
     @nn.compact
     def __call__(self, x):
         x = jnp.transpose(x, (0, 2, 3, 1))
@@ -140,6 +151,8 @@ class Network(nn.Module):
             bias_init=constant(0.0),
         )(x)
         x = nn.relu(x)
+        if self.layer_norm:
+            x = nn.LayerNorm()(x)
         x = nn.Conv(
             64,
             kernel_size=(4, 4),
@@ -149,6 +162,8 @@ class Network(nn.Module):
             bias_init=constant(0.0),
         )(x)
         x = nn.relu(x)
+        if self.layer_norm:
+            x = nn.LayerNorm()(x)
         x = nn.Conv(
             64,
             kernel_size=(3, 3),
@@ -158,11 +173,15 @@ class Network(nn.Module):
             bias_init=constant(0.0),
         )(x)
         x = nn.relu(x)
+        if self.layer_norm:
+            x = nn.LayerNorm()(x)
         x = x.reshape((x.shape[0], -1))
         x = nn.Dense(512, kernel_init=orthogonal(np.sqrt(2)), bias_init=constant(0.0))(
             x
         )
         x = nn.relu(x)
+        if self.layer_norm:
+            x = nn.LayerNorm()(x)
         return x
 
 
@@ -222,8 +241,9 @@ if __name__ == "__main__":
     config_readable = configs[args.id]
 
     config = copy.deepcopy(config_readable)
-    # config["INITIALIZERS"] = make_initializers(config_readable["INITIALIZERS"])
-    print(config)
+
+    # update the CLI arguments with the values from the configuration file
+    args.update(config)
 
     args.batch_size = int(args.num_envs * args.num_steps)
     args.minibatch_size = int(args.batch_size // args.num_minibatches)
@@ -303,7 +323,7 @@ if __name__ == "__main__":
         )
         return args.learning_rate * frac
 
-    network = Network()
+    network = Network(layer_norm=args.layer_norm)
     actor = Actor(action_dim=envs.single_action_space.n)
     critic = Critic()
     network_params = network.init(
