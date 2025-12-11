@@ -37,16 +37,15 @@ def generate_config(cfg_key: str = "hopper", id: int = 0, verbose: bool = True):
     all_configs = generate_all_configs(cfgs)
 
     cfg = all_configs[id]
-    
+
     if verbose:
         print()
         pprint.pprint(cfg)
 
     return cfg
 
-def configs_to_bin(cfg_key: str = "hopper", out_path: str = "configs.bin"):
-    cfg_key: str = "hopper"
 
+def configs_to_bin(cfg_key: str = "hopper", out_path: str = "configs.bin"):
     cfgs = META_CONFIG[cfg_key]
     total_num = num_configurations(cfgs)
 
