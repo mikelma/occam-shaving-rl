@@ -9,6 +9,7 @@ META_CONFIG = {
         # constants
         "ENV_NAME": ["walker2d", "ant", "humanoid"],
         "DEBUG": True,
+        "LOG_DIR": "logs/",
         "NUM_PARALLEL_RUNS": 30,
         "VF_COEF": 0.5,
         "NUM_STEPS": 10,
@@ -53,6 +54,7 @@ META_CONFIG = {
     "atari": {
         # constants
         "env_id": ["SpaceInvaders-v5", "Asterix-v5", "Seaquest-v5"],
+        "log_dir": "logs/",
         "seed": list(range(10)),
         "vf_coef": 0.5,
         "num_steps": 128,

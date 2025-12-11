@@ -21,6 +21,7 @@ from flax.training.train_state import TrainState
 
 import copy
 import msgpack
+import csv
 
 # Fix weird OOM https://github.com/google/jax/discussions/6332#discussioncomment-1279991
 os.environ["XLA_PYTHON_CLIENT_MEM_FRACTION"] = "0.6"
@@ -106,6 +107,8 @@ class Args(Updateable):
     """the target KL divergence threshold"""
     layer_norm: bool = False
     """apply layer norm in every layer"""
+    log_dir: str = "logs/"
+    """logging directory"""
 
     # to be filled in runtime
     batch_size: int = 0
@@ -575,6 +578,25 @@ if __name__ == "__main__":
         max_steps=args.num_steps,
     )
 
+    # writer.add_scalar("losses/value_loss", v_loss[-1, -1].item(), global_step)
+    # writer.add_scalar("losses/policy_loss", pg_loss[-1, -1].item(), global_step)
+    # writer.add_scalar("losses/entropy", entropy_loss[-1, -1].item(), global_step)
+    # writer.add_scalar("losses/approx_kl", approx_kl[-1, -1].item(), global_step)
+    # writer.add_scalar("losses/loss", loss[-1, -1].item(), global_step)
+    log = {
+        "step": [],
+        "episodic_return": [],
+        "episode_len": [],
+        "value_loss": [],
+        "policy_loss": [],
+        "loss": [],
+        "entropy": [],
+    }
+    run_dir = f"{args.log_dir}/atari_{args.id}"
+
+    if not os.path.exists(run_dir):
+        os.makedirs(run_dir)
+
     for iteration in range(1, args.num_iterations + 1):
         iteration_time_start = time.time()
         agent_state, episode_stats, next_obs, next_done, storage, key, handle = rollout(
@@ -592,37 +614,21 @@ if __name__ == "__main__":
         )
         print(f"global_step={global_step}, avg_episodic_return={avg_episodic_return}")
 
-        # TRY NOT TO MODIFY: record rewards for plotting purposes
-        # writer.add_scalar(
-        #     "charts/avg_episodic_return", avg_episodic_return, global_step
-        # )
-        # writer.add_scalar(
-        #     "charts/avg_episodic_length",
-        #     np.mean(jax.device_get(episode_stats.returned_episode_lengths)),
-        #     global_step,
-        # )
-        # writer.add_scalar(
-        #     "charts/learning_rate",
-        #     agent_state.opt_state[1].hyperparams["learning_rate"].item(),
-        #     global_step,
-        # )
-        # writer.add_scalar("losses/value_loss", v_loss[-1, -1].item(), global_step)
-        # writer.add_scalar("losses/policy_loss", pg_loss[-1, -1].item(), global_step)
-        # writer.add_scalar("losses/entropy", entropy_loss[-1, -1].item(), global_step)
-        # writer.add_scalar("losses/approx_kl", approx_kl[-1, -1].item(), global_step)
-        # writer.add_scalar("losses/loss", loss[-1, -1].item(), global_step)
+        log["step"].append(global_step)
+        log["episodic_return"].append(avg_episodic_return)
+        log["episode_len"].append(
+            np.mean(jax.device_get(episode_stats.returned_episode_lengths))
+        )
+        log["value_loss"].append(v_loss[-1, -1].item())
+        log["policy_loss"].append(pg_loss[-1, -1].item())
+        log["loss"].append(loss[-1, -1].item())
+        log["entropy"].append(entropy_loss[-1, -1].item())
+
         print("SPS:", int(global_step / (time.time() - start_time)))
-        # writer.add_scalar(
-        #     "charts/SPS", int(global_step / (time.time() - start_time)), global_step
-        # )
-        # writer.add_scalar(
-        #     "charts/SPS_update",
-        #     int(args.num_envs * args.num_steps / (time.time() - iteration_time_start)),
-        #     global_step,
-        # )
+        break
 
     if args.save_model:
-        model_path = f"runs/{run_name}/{args.exp_name}.cleanrl_model"
+        model_path = f"{run_dir}/model"
         with open(model_path, "wb") as f:
             f.write(
                 flax.serialization.to_bytes(
@@ -637,26 +643,14 @@ if __name__ == "__main__":
                 )
             )
         print(f"model saved to {model_path}")
-        # from cleanrl_utils.evals.ppo_envpool_jax_eval import evaluate
-        #
-        # episodic_returns = evaluate(
-        #     model_path,
-        #     make_env,
-        #     args.env_id,
-        #     eval_episodes=10,
-        #     run_name=f"{run_name}-eval",
-        #     Model=(Network, Actor, Critic),
-        # )
-        # for idx, episodic_return in enumerate(episodic_returns):
-        #     writer.add_scalar("eval/episodic_return", episodic_return, idx)
-        #
-        # if args.upload_model:
-        #     from cleanrl_utils.huggingface import push_to_hub
-        #
-        #     repo_name = f"{args.env_id}-{args.exp_name}-seed{args.seed}"
-        #     repo_id = f"{args.hf_entity}/{repo_name}" if args.hf_entity else repo_name
-        #     push_to_hub(args, episodic_returns, repo_id, "PPO", f"runs/{run_name}", f"videos/{run_name}-eval")
 
     envs.close()
-    # writer.close()
     print("Finished Training")
+
+    print("Saving log file...")
+    with open(f"{run_dir}/atari_{args.id}.csv", "w", newline="") as f:
+        w = csv.DictWriter(f, log.keys())
+        w.writeheader()
+        for i in range(len(log["step"])):
+            w.writerow(dict({k: log[k][i] for k in log.keys()}))
+    print("Done!")
