@@ -1,0 +1,10 @@
+jax==0.4.34
+jaxlib==0.4.34
+numpy
+optax==0.1.4
+envpool
+scipy
+flax
+tensorboard
+gym
+tyro
