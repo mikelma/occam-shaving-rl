@@ -625,7 +625,6 @@ if __name__ == "__main__":
         log["entropy"].append(entropy_loss[-1, -1].item())
 
         print("SPS:", int(global_step / (time.time() - start_time)))
-        break
 
     if args.save_model:
         model_path = f"{run_dir}/model"
