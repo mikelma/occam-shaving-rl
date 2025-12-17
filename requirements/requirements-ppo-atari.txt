@@ -1,10 +1,10 @@
 jax==0.4.28
 jaxlib==0.4.28
 numpy
-optax==0.1.4
+optax
 envpool
 scipy
-flax
+flax==0.8.5 
 tensorboard
 gym
 tyro
