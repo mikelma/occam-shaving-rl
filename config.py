@@ -96,4 +96,27 @@ META_CONFIG = {
         #     # },
         # ],
     },
+    "atari_baseline": {
+        # constants
+        "env_id": ["SpaceInvaders-v5", "Asterix-v5", "Seaquest-v5"],
+        "log_dir": "logs/",
+        "seed": list(range(10)),
+        "vf_coef": 0.5,
+        "num_steps": 128,
+        "total_timesteps": int(10_000_000),
+        "gamma": 0.99,
+        "hidden_dim": 512,
+        "num_envs": 8,
+        # variables
+        "learning_rate": 2.5e-4,
+        "ent_coef": 0.01,
+        "update_epochs": 4,
+        "num_minibatches": 4,
+        "gae_lambda": 0.95,
+        "clip_coef": 0.1,
+        "max_grad_norm": 0.5,
+        "anneal_lr": True,
+        "norm_adv": True,
+        "layer_norm": False,
+    },
 }
