@@ -8,7 +8,7 @@ META_CONFIG = {
     "brax": {
         # constants
         "ENV_NAME": ["walker2d", "ant", "humanoid"],
-        "DEBUG": True,
+        "DEBUG": False,
         "LOG_DIR": "logs/",
         "NUM_PARALLEL_RUNS": 30,
         "VF_COEF": 0.5,
