@@ -2,16 +2,16 @@ import jax
 import jax.numpy as jnp
 import flax.linen as nn
 import optax
-from flax.linen.initializers import constant, orthogonal
+from flax.linen.initializers import constant, orthogonal, glorot_uniform
 from typing import Sequence, NamedTuple, Callable
 from flax.training.train_state import TrainState
 import distrax
 import pickle
 import tyro
 import copy
+import os
 from dataclasses import dataclass
 import msgpack
-import os
 from purejaxrl.purejaxrl.wrappers import (
     LogWrapper,
     BraxGymnaxWrapper,
@@ -27,11 +27,8 @@ class Args:
     id: int = 0
     """Experiment's ID (and seed)"""
 
-    confs: str = "configs.bin"
+    confs: str = "brax_confs.bin"
     """Meta configuration file path"""
-
-    out_dir: str = "outputs"
-    """Directory to save results"""
 
 
 def make_initializers(specification):
@@ -52,6 +49,7 @@ class SplitActorCritic(nn.Module):
     action_dim: Sequence[int]
     activation: str = "tanh"
     hidden_dim: int = 256
+    layer_norm: bool = False
 
     @nn.compact
     def __call__(self, x):
@@ -60,38 +58,62 @@ class SplitActorCritic(nn.Module):
         else:
             activation = nn.tanh
         actor_mean = nn.Dense(
-            self.hidden_dim, kernel_init=self.initializers["shared"], bias_init=constant(0.0)
+            self.hidden_dim,
+            kernel_init=self.initializers["shared"],
+            bias_init=constant(0.0),
         )(x)
         actor_mean = activation(actor_mean)
+        if self.layer_norm:
+            actor_mean = nn.LayerNorm()(actor_mean)
+
         actor_mean = nn.Dense(
-            self.hidden_dim, kernel_init=self.initializers["shared"], bias_init=constant(0.0)
+            self.hidden_dim,
+            kernel_init=self.initializers["shared"],
+            bias_init=constant(0.0),
         )(actor_mean)
         actor_mean = activation(actor_mean)
+        if self.layer_norm:
+            actor_mean = nn.LayerNorm()(actor_mean)
+
         actor_mean = nn.Dense(
-            self.action_dim, kernel_init=self.initializers["actor"], bias_init=constant(0.0)
+            self.action_dim,
+            kernel_init=self.initializers["actor"],
+            bias_init=constant(0.0),
         )(actor_mean)
         actor_logtstd = self.param("log_std", nn.initializers.zeros, (self.action_dim,))
         pi = distrax.MultivariateNormalDiag(actor_mean, jnp.exp(actor_logtstd))
 
         critic = nn.Dense(
-            self.hidden_dim, kernel_init=self.initializers["shared"], bias_init=constant(0.0)
+            self.hidden_dim,
+            kernel_init=self.initializers["shared"],
+            bias_init=constant(0.0),
         )(x)
         critic = activation(critic)
+        if self.layer_norm:
+            critic = nn.LayerNorm()(critic)
+
         critic = nn.Dense(
-            self.hidden_dim, kernel_init=self.initializers["shared"], bias_init=constant(0.0)
+            self.hidden_dim,
+            kernel_init=self.initializers["shared"],
+            bias_init=constant(0.0),
         )(critic)
         critic = activation(critic)
-        critic = nn.Dense(1, kernel_init=self.initializers["critic"], bias_init=constant(0.0))(
-            critic
-        )
+        if self.layer_norm:
+            critic = nn.LayerNorm()(critic)
+
+        critic = nn.Dense(
+            1, kernel_init=self.initializers["critic"], bias_init=constant(0.0)
+        )(critic)
 
         return pi, jnp.squeeze(critic, axis=-1)
+
 
 class CombinedActorCritic(nn.Module):
     initializers: dict[str, Callable]
     action_dim: Sequence[int]
     activation: str = "tanh"
     hidden_dim: int = 256
+    layer_norm: bool = False
 
     @nn.compact
     def __call__(self, x):
@@ -101,26 +123,38 @@ class CombinedActorCritic(nn.Module):
             activation = nn.tanh
 
         shared_mean = nn.Dense(
-            self.hidden_dim, kernel_init=self.initializers["shared"], bias_init=constant(0.0)
+            self.hidden_dim,
+            kernel_init=self.initializers["shared"],
+            bias_init=constant(0.0),
         )(x)
         shared_mean = activation(shared_mean)
+
+        if self.layer_norm:
+            shared_mean = nn.LayerNorm()(shared_mean)
+
         shared_mean = nn.Dense(
-            self.hidden_dim, kernel_init=self.initializers["shared"], bias_init=constant(0.0)
+            self.hidden_dim,
+            kernel_init=self.initializers["shared"],
+            bias_init=constant(0.0),
         )(shared_mean)
         shared_mean = activation(shared_mean)
 
+        if self.layer_norm:
+            shared_mean = nn.LayerNorm()(shared_mean)
+
         actor_mean = nn.Dense(
-            self.action_dim, kernel_init=self.initializers["actor"], bias_init=constant(0.0)
+            self.action_dim,
+            kernel_init=self.initializers["actor"],
+            bias_init=constant(0.0),
         )(shared_mean)
         actor_logtstd = self.param("log_std", nn.initializers.zeros, (self.action_dim,))
         pi = distrax.MultivariateNormalDiag(actor_mean, jnp.exp(actor_logtstd))
 
-        critic = nn.Dense(1, kernel_init=self.initializers["critic"], bias_init=constant(0.0))(
-            shared_mean
-        )
+        critic = nn.Dense(
+            1, kernel_init=self.initializers["critic"], bias_init=constant(0.0)
+        )(shared_mean)
 
         return pi, jnp.squeeze(critic, axis=-1)
-
 
 
 class Transition(NamedTuple):
@@ -164,7 +198,7 @@ def make_train(config):
                 env.action_space(env_params).shape[0],
                 activation=config["ACTIVATION"],
                 hidden_dim=config["HIDDEN_DIM"],
-
+                layer_norm=config["LAYER_NORM"],
             )
         else:
             network = CombinedActorCritic(
@@ -172,6 +206,7 @@ def make_train(config):
                 env.action_space(env_params).shape[0],
                 activation=config["ACTIVATION"],
                 hidden_dim=config["HIDDEN_DIM"],
+                layer_norm=config["LAYER_NORM"],
             )
         rng, _rng = jax.random.split(rng)
         init_x = jnp.zeros(env.observation_space(env_params).shape)
@@ -314,9 +349,9 @@ def make_train(config):
                 train_state, traj_batch, advantages, targets, rng = update_state
                 rng, _rng = jax.random.split(rng)
                 batch_size = config["MINIBATCH_SIZE"] * config["NUM_MINIBATCHES"]
-                assert (
-                    batch_size == config["NUM_STEPS"] * config["NUM_ENVS"]
-                ), "batch size must be equal to number of steps * number of envs"
+                assert batch_size == config["NUM_STEPS"] * config["NUM_ENVS"], (
+                    "batch size must be equal to number of steps * number of envs"
+                )
                 permutation = jax.random.permutation(_rng, batch_size)
                 batch = (traj_batch, advantages, targets)
                 batch = jax.tree_util.tree_map(
@@ -376,21 +411,47 @@ def make_train(config):
 if __name__ == "__main__":
     args = tyro.cli(Args)
 
-    f = open(args.confs, 'rb')
+    f = open(args.confs, "rb")
     bin = f.read()
     f.close()
     configs = msgpack.unpackb(bin, raw=False)
 
     config_readable = configs[args.id]
-    os.makedirs(f"{args.out_dir}", exist_ok=True)
+
+    print(config_readable)
+
     config = copy.deepcopy(config_readable)
     config["INITIALIZERS"] = make_initializers(config_readable["INITIALIZERS"])
-    print(config)
 
     rng = jax.random.PRNGKey(args.id)
     keys = jax.random.split(rng, num=config["NUM_PARALLEL_RUNS"])
     train_jit_vmap = jax.jit(jax.vmap(make_train(config)))
     out = jax.block_until_ready(train_jit_vmap(keys))
 
-    with open(f"{args.out_dir}/output__{args.id}.pkl", "wb") as f:
-        pickle.dump(out["metrics"], f)
+    # dims: (num_parallel_seeds, num_updates, num_steps_in_batch, num_parallel_envs)
+    ep_rets = out["metrics"]["returned_episode_returns"]
+    ep_lens = out["metrics"]["returned_episode_lengths"]
+
+    ep_rets = ep_rets.mean(-1)  # average results from parallel envs.
+    ep_lens = ep_lens.mean(-1)
+    ep_rets = ep_rets.reshape(
+        ep_rets.shape[0], -1
+    )  # flatten array to shape: (num_seeds, num_updates*num_steps)
+    ep_lens = ep_lens.reshape(ep_lens.shape[0], -1)
+
+    # global_steps = jnp.arange(0, config["TOTAL_TIMESTEPS"], step=config["NUM_ENVS"])
+    global_steps = config["NUM_ENVS"] * jnp.arange(1, ep_lens.shape[1] + 1)
+
+    runs_dir = f"{config['LOG_DIR']}/brax_{args.id}"
+    if not os.path.exists(runs_dir):
+        os.makedirs(runs_dir)
+
+    with open(f"{runs_dir}/brax_{args.id}.csv", "w") as f:
+        # write header
+        f.write("seed,step,episodic_return,episode_len\n")
+        for run_id in range(config["NUM_PARALLEL_RUNS"]):
+            # the rest of rows
+            for i in range(global_steps.shape[0]):
+                f.write(
+                    f"{run_id},{global_steps[i]},{ep_rets[run_id][i]},{ep_lens[run_id][i]}\n"
+                )
