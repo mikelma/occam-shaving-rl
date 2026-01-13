@@ -119,11 +119,11 @@ META_CONFIG = {
         "norm_adv": True,
         "layer_norm": False,
     },
-    },
-    "mujoco_baseline": {
+    "brax_baseline": {
         # constants
-        "ENV_NAME": ["ant", "humanoid", "walker2d"],
+        "ENV_NAME": ["walker2d", "ant", "humanoid"],
         "DEBUG": False,
+        "LOG_DIR": "baseline_logs/",
         "NUM_PARALLEL_RUNS": 30,
         "VF_COEF": 0.5,
         "NUM_STEPS": 10,
