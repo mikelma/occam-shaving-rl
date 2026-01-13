@@ -123,7 +123,7 @@ META_CONFIG = {
         # constants
         "ENV_NAME": ["walker2d", "ant", "humanoid"],
         "DEBUG": False,
-        "LOG_DIR": "baseline_logs/",
+        "LOG_DIR": "brax_baseline_logs/",
         "NUM_PARALLEL_RUNS": 30,
         "VF_COEF": 0.5,
         "NUM_STEPS": 10,
@@ -145,6 +145,7 @@ META_CONFIG = {
         "GAE_NORMALIZATION": True,
         "SPLIT_AC": False,
         "HIDDEN_DIM": 256,
+        "LAYER_NORM": False,
         "INITIALIZERS": [
             {
                 "shared": ["orthogonal", np.sqrt(2)],
