@@ -2,16 +2,12 @@ version = 1
 revision = 3
 requires-python = ">=3.11"
 resolution-markers = [
-    "python_full_version >= '3.13' and sys_platform == 'linux' and extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax'",
-    "python_full_version >= '3.13' and sys_platform != 'linux' and extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax'",
-    "python_full_version == '3.12.*' and sys_platform == 'linux' and extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax'",
-    "python_full_version == '3.12.*' and sys_platform != 'linux' and extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax'",
-    "python_full_version < '3.12' and sys_platform == 'linux' and extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax'",
-    "python_full_version < '3.12' and sys_platform != 'linux' and extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax'",
-    "python_full_version >= '3.13' and extra == 'group-16-occam-shaving-rl-atari' and extra != 'group-16-occam-shaving-rl-brax'",
-    "python_full_version == '3.12.*' and extra == 'group-16-occam-shaving-rl-atari' and extra != 'group-16-occam-shaving-rl-brax'",
-    "python_full_version < '3.12' and extra == 'group-16-occam-shaving-rl-atari' and extra != 'group-16-occam-shaving-rl-brax'",
-    "extra != 'group-16-occam-shaving-rl-atari' and extra != 'group-16-occam-shaving-rl-brax'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform != 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform != 'linux'",
+    "python_full_version < '3.12' and sys_platform == 'linux'",
+    "python_full_version < '3.12' and sys_platform != 'linux'",
 ]
 conflicts = [[
     { package = "occam-shaving-rl", group = "atari" },
@@ -103,29 +99,76 @@ wheels = [
 
 [[package]]
 name = "brax"
+version = "0.12.5"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform != 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform != 'linux'",
+    "python_full_version < '3.12' and sys_platform == 'linux'",
+    "python_full_version < '3.12' and sys_platform != 'linux'",
+]
+dependencies = [
+    { name = "absl-py", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "etils", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "flask", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "flask-cors", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "flax", version = "0.6.11", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "jax", version = "0.4.20", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "jaxlib", version = "0.4.20", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "jaxopt", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "jinja2", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "ml-collections", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "mujoco", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "mujoco-mjx", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "optax", version = "0.1.8", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "orbax-checkpoint", version = "0.5.16", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "pillow", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "scipy", version = "1.12.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "tensorboardx", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "trimesh", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "typing-extensions", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ca/06/5b44aa99799213a0f1f5265176655a15f33304e6097586d8fbbe6684756e/brax-0.12.5.tar.gz", hash = "sha256:4a6b53fd5a3bd3df9ebf87a1772bf9fd58c85840e94e9ec5469016888ca2a546", size = 200141, upload-time = "2025-08-14T16:19:06.439Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/62/db/a3b51e5698679a937580d5784adb111e0374d64d520daca15d1b3e530426/brax-0.12.5-py3-none-any.whl", hash = "sha256:2960b7fdd00a00bf70e325e0e0364209e73513383d2712bfe5976b6887c6f7c0", size = 343655, upload-time = "2025-08-14T16:19:05.069Z" },
+]
+
+[[package]]
+name = "brax"
 version = "0.13.0"
 source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform != 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform != 'linux'",
+    "python_full_version < '3.12' and sys_platform == 'linux'",
+    "python_full_version < '3.12' and sys_platform != 'linux'",
+]
 dependencies = [
-    { name = "absl-py" },
-    { name = "etils" },
-    { name = "flask" },
-    { name = "flask-cors" },
-    { name = "flax", version = "0.12.1", source = { registry = "https://pypi.org/simple" } },
-    { name = "jax", version = "0.8.1", source = { registry = "https://pypi.org/simple" } },
-    { name = "jaxlib", version = "0.8.1", source = { registry = "https://pypi.org/simple" } },
-    { name = "jaxopt" },
-    { name = "jinja2" },
-    { name = "ml-collections" },
-    { name = "mujoco" },
-    { name = "mujoco-mjx" },
-    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" } },
-    { name = "optax", version = "0.2.6", source = { registry = "https://pypi.org/simple" } },
-    { name = "orbax-checkpoint", version = "0.11.30", source = { registry = "https://pypi.org/simple" } },
-    { name = "pillow" },
-    { name = "scipy", version = "1.15.3", source = { registry = "https://pypi.org/simple" } },
-    { name = "tensorboardx" },
-    { name = "trimesh" },
-    { name = "typing-extensions" },
+    { name = "absl-py", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "etils", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "flask", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "flask-cors", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "flax", version = "0.12.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "jax", version = "0.8.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "jaxlib", version = "0.8.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "jaxopt", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "jinja2", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "ml-collections", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "mujoco", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "mujoco-mjx", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "optax", version = "0.2.6", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "orbax-checkpoint", version = "0.11.30", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "pillow", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "scipy", version = "1.15.3", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "tensorboardx", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "trimesh", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "typing-extensions", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/c2/b1/07d7210dd57646da84d288b2d92a84a1db16ad84296a7217931bf86c9349/brax-0.13.0.tar.gz", hash = "sha256:0e87a9afc4888ed4b0156662f1bc0ea284082b9c23dedbcb0e690acdff8061c6", size = 200518, upload-time = "2025-08-15T18:50:22.52Z" }
 wheels = [
@@ -199,17 +242,20 @@ name = "chex"
 version = "0.1.82"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.13'",
-    "python_full_version == '3.12.*'",
-    "python_full_version < '3.12'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform != 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform != 'linux'",
+    "python_full_version < '3.12' and sys_platform == 'linux'",
+    "python_full_version < '3.12' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "absl-py" },
-    { name = "jax", version = "0.4.20", source = { registry = "https://pypi.org/simple" } },
-    { name = "jaxlib", version = "0.4.20", source = { registry = "https://pypi.org/simple" } },
-    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" } },
-    { name = "toolz" },
-    { name = "typing-extensions" },
+    { name = "absl-py", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "jax", version = "0.4.20", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "jaxlib", version = "0.4.20", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "toolz", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "typing-extensions", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/48/32/8986136bcda43de50b6189bd9c3b43ecbc3cd457831dfd06679ef21ca1a3/chex-0.1.82.tar.gz", hash = "sha256:a9b151ada0b5c1bc5a8ae572617eb09f2fe4ff110fe1d75045f9083eecf5b2c1", size = 86801, upload-time = "2023-07-20T10:24:28.622Z" }
 wheels = [
@@ -229,12 +275,12 @@ resolution-markers = [
     "python_full_version < '3.12' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "absl-py" },
-    { name = "jax", version = "0.8.1", source = { registry = "https://pypi.org/simple" } },
-    { name = "jaxlib", version = "0.8.1", source = { registry = "https://pypi.org/simple" } },
-    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" } },
-    { name = "toolz" },
-    { name = "typing-extensions" },
+    { name = "absl-py", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "jax", version = "0.8.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "jaxlib", version = "0.8.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "toolz", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "typing-extensions", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/5b/7d/812f01e7b2ddf28a0caa8dde56bd951a2c8f691c9bbfce38d469458d1502/chex-0.1.91.tar.gz", hash = "sha256:65367a521415ada905b8c0222b0a41a68337fcadf79a1fb6fc992dbd95dd9f76", size = 90302, upload-time = "2025-09-01T21:49:32.834Z" }
 wheels = [
@@ -246,7 +292,7 @@ name = "click"
 version = "8.3.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "colorama", marker = "sys_platform == 'win32'" },
+    { name = "colorama", marker = "sys_platform == 'win32' or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/46/61/de6cd827efad202d7057d93e0fed9294b96952e188f7384832791c7b2254/click-8.3.0.tar.gz", hash = "sha256:e7b8232224eba16f4ebe410c25ced9f7875cb5f3263ffc93cc3e8da705e229c4", size = 276943, upload-time = "2025-09-18T17:32:23.696Z" }
 wheels = [
@@ -276,7 +322,8 @@ name = "contourpy"
 version = "1.3.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" } },
+    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/66/54/eb9bfc647b19f2009dd5c7f5ec51c4e6ca831725f1aea7a993034f483147/contourpy-1.3.2.tar.gz", hash = "sha256:b6945942715a034c671b7fc54f9588126b0b8bf23db2696e3ca8328f3ff0ab54", size = 13466130, upload-time = "2025-04-15T17:47:53.79Z" }
 wheels = [
@@ -354,15 +401,49 @@ wheels = [
 
 [[package]]
 name = "distrax"
+version = "0.1.5"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform != 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform != 'linux'",
+    "python_full_version < '3.12' and sys_platform == 'linux'",
+    "python_full_version < '3.12' and sys_platform != 'linux'",
+]
+dependencies = [
+    { name = "absl-py", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "chex", version = "0.1.82", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "jax", version = "0.4.20", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "jaxlib", version = "0.4.20", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "setuptools", marker = "(python_full_version >= '3.12' and extra == 'group-16-occam-shaving-rl-atari') or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
+    { name = "tensorflow-probability", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/81/a7/d87f5c5caf2ae9e28a9f506274870c25eb7e38c1ce0a1b7b3696afc73ac9/distrax-0.1.5.tar.gz", hash = "sha256:ec41522d389af69efedc8d475a7e6d8f229429c00f2140dcd641feacf7e21948", size = 190162, upload-time = "2023-11-22T12:53:44.836Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d8/42/efa7985eefd516f273bc5557550539ebd687cc6a3a2a176d5e1f5b0398ca/distrax-0.1.5-py3-none-any.whl", hash = "sha256:5020f4b53a9a480d019c12e44292fbacb7de857cce478bc594dacf29519c61b7", size = 319716, upload-time = "2023-11-22T12:53:42.449Z" },
+]
+
+[[package]]
+name = "distrax"
 version = "0.1.7"
 source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform != 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform != 'linux'",
+    "python_full_version < '3.12' and sys_platform == 'linux'",
+    "python_full_version < '3.12' and sys_platform != 'linux'",
+]
 dependencies = [
-    { name = "absl-py" },
-    { name = "chex", version = "0.1.91", source = { registry = "https://pypi.org/simple" } },
-    { name = "jax", version = "0.8.1", source = { registry = "https://pypi.org/simple" } },
-    { name = "jaxlib", version = "0.8.1", source = { registry = "https://pypi.org/simple" } },
-    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" } },
-    { name = "tfp-nightly" },
+    { name = "absl-py", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "chex", version = "0.1.91", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "jax", version = "0.8.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "jaxlib", version = "0.8.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "tfp-nightly", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/21/a1/eb2086d2fc27ddf627f47af392d67e7e023a153d1b00087d3d12eab0465a/distrax-0.1.7.tar.gz", hash = "sha256:78deec181894e811d416b34e6b500f5e8f6d39bc850bd6f3152ee9e2164c9bef", size = 183672, upload-time = "2025-09-01T23:06:00.108Z" }
 wheels = [
@@ -376,9 +457,9 @@ source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "absl-py" },
     { name = "dm-tree", version = "0.1.8", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.13' and extra == 'group-16-occam-shaving-rl-atari') or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
-    { name = "dm-tree", version = "0.1.9", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.13' and extra == 'group-16-occam-shaving-rl-atari') or (python_full_version >= '3.13' and extra == 'group-16-occam-shaving-rl-brax') or (extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
+    { name = "dm-tree", version = "0.1.9", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.13' or extra != 'group-16-occam-shaving-rl-atari' or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
     { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
-    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax'" },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/62/c9/93e8d6239d5806508a2ee4b370e67c6069943ca149f59f533923737a99b7/dm-env-1.6.tar.gz", hash = "sha256:a436eb1c654c39e0c986a516cee218bea7140b510fceff63f97eb4fcff3d93de", size = 20187, upload-time = "2022-12-21T00:25:29.306Z" }
 wheels = [
@@ -390,7 +471,8 @@ name = "dm-tree"
 version = "0.1.8"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.13'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform != 'linux'",
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/f8/6d/f1997aac42e0f550c1e952a0b920eaa0bfc4d27d0421499881b934b969fc/dm-tree-0.1.8.tar.gz", hash = "sha256:0fcaabbb14e7980377439e7140bd05552739ca5e515ecb3119f234acee4b9430", size = 35384, upload-time = "2022-12-18T09:46:55.953Z" }
 wheels = [
@@ -416,21 +498,19 @@ name = "dm-tree"
 version = "0.1.9"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.13' and sys_platform == 'linux' and extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax'",
-    "python_full_version >= '3.13' and sys_platform != 'linux' and extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax'",
-    "python_full_version == '3.12.*' and sys_platform == 'linux' and extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax'",
-    "python_full_version == '3.12.*' and sys_platform != 'linux' and extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax'",
-    "python_full_version < '3.12' and sys_platform == 'linux' and extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax'",
-    "python_full_version < '3.12' and sys_platform != 'linux' and extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax'",
-    "python_full_version == '3.12.*' and extra == 'group-16-occam-shaving-rl-atari' and extra != 'group-16-occam-shaving-rl-brax'",
-    "python_full_version < '3.12' and extra == 'group-16-occam-shaving-rl-atari' and extra != 'group-16-occam-shaving-rl-brax'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform != 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform != 'linux'",
+    "python_full_version < '3.12' and sys_platform == 'linux'",
+    "python_full_version < '3.12' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "absl-py", marker = "(python_full_version < '3.13' and extra == 'group-16-occam-shaving-rl-atari') or (python_full_version >= '3.13' and extra == 'group-16-occam-shaving-rl-brax') or (extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
-    { name = "attrs", marker = "(python_full_version < '3.13' and extra == 'group-16-occam-shaving-rl-atari') or (python_full_version >= '3.13' and extra == 'group-16-occam-shaving-rl-brax') or (extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
+    { name = "absl-py", marker = "python_full_version < '3.13' or extra != 'group-16-occam-shaving-rl-atari' or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
+    { name = "attrs", marker = "python_full_version < '3.13' or extra != 'group-16-occam-shaving-rl-atari' or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
     { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.13' and extra == 'group-16-occam-shaving-rl-atari') or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
-    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax'" },
-    { name = "wrapt", marker = "(python_full_version < '3.13' and extra == 'group-16-occam-shaving-rl-atari') or (python_full_version >= '3.13' and extra == 'group-16-occam-shaving-rl-brax') or (extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "wrapt", marker = "python_full_version < '3.13' or extra != 'group-16-occam-shaving-rl-atari' or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/a6/83/ce29720ccf934c6cfa9b9c95ebbe96558386e66886626066632b5e44afed/dm_tree-0.1.9.tar.gz", hash = "sha256:a4c7db3d3935a5a2d5e4b383fc26c6b0cd6f78c6d4605d3e7b518800ecd5342b", size = 35623, upload-time = "2025-01-30T20:45:37.13Z" }
 wheels = [
@@ -556,21 +636,24 @@ name = "flax"
 version = "0.6.11"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.13'",
-    "python_full_version == '3.12.*'",
-    "python_full_version < '3.12'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform != 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform != 'linux'",
+    "python_full_version < '3.12' and sys_platform == 'linux'",
+    "python_full_version < '3.12' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "jax", version = "0.4.20", source = { registry = "https://pypi.org/simple" } },
-    { name = "msgpack" },
-    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" } },
-    { name = "optax", version = "0.1.8", source = { registry = "https://pypi.org/simple" } },
-    { name = "orbax-checkpoint", version = "0.5.16", source = { registry = "https://pypi.org/simple" } },
-    { name = "pyyaml" },
-    { name = "rich" },
+    { name = "jax", version = "0.4.20", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "msgpack", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "optax", version = "0.1.8", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "orbax-checkpoint", version = "0.5.16", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "pyyaml", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "rich", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
     { name = "tensorstore", version = "0.1.74", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.13' and extra == 'group-16-occam-shaving-rl-atari') or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
     { name = "tensorstore", version = "0.1.78", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.13' and extra == 'group-16-occam-shaving-rl-atari') or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
-    { name = "typing-extensions" },
+    { name = "typing-extensions", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/10/98/897b7e11e89b4b3e1ee8808a47d56c8c0d30484f128e02a4c76f65033871/flax-0.6.11.tar.gz", hash = "sha256:ecedf179ceb16c0b511982a293834bb13086168dce1dff697ac083efa818fc72", size = 2036455, upload-time = "2023-06-21T22:46:29.623Z" }
 wheels = [
@@ -590,16 +673,16 @@ resolution-markers = [
     "python_full_version < '3.12' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "jax", version = "0.8.1", source = { registry = "https://pypi.org/simple" } },
-    { name = "msgpack" },
-    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" } },
-    { name = "optax", version = "0.2.6", source = { registry = "https://pypi.org/simple" } },
-    { name = "orbax-checkpoint", version = "0.11.30", source = { registry = "https://pypi.org/simple" } },
-    { name = "pyyaml" },
-    { name = "rich" },
-    { name = "tensorstore", version = "0.1.78", source = { registry = "https://pypi.org/simple" } },
-    { name = "treescope" },
-    { name = "typing-extensions" },
+    { name = "jax", version = "0.8.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "msgpack", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "optax", version = "0.2.6", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "orbax-checkpoint", version = "0.11.30", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "pyyaml", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "rich", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "tensorstore", version = "0.1.78", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "treescope", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "typing-extensions", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/fb/9c/4f8860d0baf9014c66d68e8f7ca491126aa5f7977fa21c269dc99c693cb0/flax-0.12.1.tar.gz", hash = "sha256:ce2229a2ecb689678ba619e822346447c173c2ac1635e674e8249b97ed816cab", size = 5021765, upload-time = "2025-11-19T21:56:34.542Z" }
 wheels = [
@@ -741,7 +824,7 @@ dependencies = [
     { name = "cloudpickle" },
     { name = "farama-notifications" },
     { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
-    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax'" },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
     { name = "typing-extensions" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/b3/de/b923d09654df8f8ee29a3cc7ec7829ac057efd0d969cc3da0c8a7b219d59/gymnasium-1.2.1.tar.gz", hash = "sha256:4e6480273528523a90b3db99befb6111b13f15fa0866de88c4b675770495b66c", size = 827852, upload-time = "2025-09-23T08:22:39.894Z" }
@@ -754,9 +837,11 @@ name = "gymnax"
 version = "0.0.9"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "flax", version = "0.12.1", source = { registry = "https://pypi.org/simple" } },
+    { name = "flax", version = "0.6.11", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "flax", version = "0.12.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
     { name = "gymnasium" },
-    { name = "jax", version = "0.8.1", source = { registry = "https://pypi.org/simple" } },
+    { name = "jax", version = "0.4.20", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "jax", version = "0.8.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
     { name = "matplotlib" },
     { name = "seaborn" },
 ]
@@ -824,16 +909,19 @@ name = "jax"
 version = "0.4.20"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.13'",
-    "python_full_version == '3.12.*'",
-    "python_full_version < '3.12'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform != 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform != 'linux'",
+    "python_full_version < '3.12' and sys_platform == 'linux'",
+    "python_full_version < '3.12' and sys_platform != 'linux'",
 ]
 dependencies = [
     { name = "ml-dtypes", version = "0.4.1", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.13' and extra == 'group-16-occam-shaving-rl-atari') or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
     { name = "ml-dtypes", version = "0.5.3", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.13' and extra == 'group-16-occam-shaving-rl-atari') or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
-    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" } },
-    { name = "opt-einsum" },
-    { name = "scipy", version = "1.12.0", source = { registry = "https://pypi.org/simple" } },
+    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "opt-einsum", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "scipy", version = "1.12.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/ed/eb/0d068a8be5c502a9d0ad794a11006a5574922fcb8c9fbe0dbb52bd236894/jax-0.4.20.tar.gz", hash = "sha256:ea96a763a8b1a9374639d1159ab4de163461d01cd022f67c34c09581b71ed2ac", size = 1436100, upload-time = "2023-11-02T21:52:00.543Z" }
 wheels = [
@@ -853,11 +941,11 @@ resolution-markers = [
     "python_full_version < '3.12' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "jaxlib", version = "0.8.1", source = { registry = "https://pypi.org/simple" } },
-    { name = "ml-dtypes", version = "0.5.3", source = { registry = "https://pypi.org/simple" } },
-    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" } },
-    { name = "opt-einsum" },
-    { name = "scipy", version = "1.15.3", source = { registry = "https://pypi.org/simple" } },
+    { name = "jaxlib", version = "0.8.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "ml-dtypes", version = "0.5.3", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "opt-einsum", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "scipy", version = "1.15.3", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/32/82/84fd2c662e4d410a34b0402de9b56bb69d7f72d1b875c3ae0edc07df18cc/jax-0.8.1.tar.gz", hash = "sha256:e53f67b15315f5e154851a7fd77a192b59c6c75b3f7ac56e214296765391cca7", size = 2509320, upload-time = "2025-11-18T19:50:02.609Z" }
 wheels = [
@@ -869,15 +957,18 @@ name = "jaxlib"
 version = "0.4.20"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.13'",
-    "python_full_version == '3.12.*'",
-    "python_full_version < '3.12'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform != 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform != 'linux'",
+    "python_full_version < '3.12' and sys_platform == 'linux'",
+    "python_full_version < '3.12' and sys_platform != 'linux'",
 ]
 dependencies = [
     { name = "ml-dtypes", version = "0.4.1", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.13' and extra == 'group-16-occam-shaving-rl-atari') or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
     { name = "ml-dtypes", version = "0.5.3", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.13' and extra == 'group-16-occam-shaving-rl-atari') or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
-    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" } },
-    { name = "scipy", version = "1.12.0", source = { registry = "https://pypi.org/simple" } },
+    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "scipy", version = "1.12.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/dd/43/07d0a8a28c4093974de393a52cb36dc35ea8d8426c663083d3e7b5dae4bf/jaxlib-0.4.20-cp311-cp311-macosx_10_14_x86_64.whl", hash = "sha256:9d39f26b0538360abd55313aa03b847d1ea224f472f84fd52edf7c714e9e5b83", size = 82604372, upload-time = "2023-11-02T21:52:43.164Z" },
@@ -905,9 +996,9 @@ resolution-markers = [
     "python_full_version < '3.12' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "ml-dtypes", version = "0.5.3", source = { registry = "https://pypi.org/simple" } },
-    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" } },
-    { name = "scipy", version = "1.15.3", source = { registry = "https://pypi.org/simple" } },
+    { name = "ml-dtypes", version = "0.5.3", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "scipy", version = "1.15.3", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/fe/8b/9babcf487c6f1b533bca9611124c4d9593367c058a96d326c7e70db7d334/jaxlib-0.8.1-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:865add56139883405f3f15c9b0de6a64ab8f4aa549dff196b72dbc86be6ccc1f", size = 55719927, upload-time = "2025-11-18T19:48:42.679Z" },
@@ -939,10 +1030,14 @@ name = "jaxopt"
 version = "0.8.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "jax", version = "0.8.1", source = { registry = "https://pypi.org/simple" } },
-    { name = "jaxlib", version = "0.8.1", source = { registry = "https://pypi.org/simple" } },
-    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" } },
-    { name = "scipy", version = "1.15.3", source = { registry = "https://pypi.org/simple" } },
+    { name = "jax", version = "0.4.20", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "jax", version = "0.8.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "jaxlib", version = "0.4.20", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "jaxlib", version = "0.8.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "scipy", version = "1.12.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "scipy", version = "1.15.3", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/3a/da/ff7d7fbd13b8ed5e8458e80308d075fc649062b9f8676d3fc56f2dc99a82/jaxopt-0.8.5.tar.gz", hash = "sha256:2790bd68ef132b216c083a8bc7a2704eceb35a92c0fc0a1e652e79dfb1e9e9ab", size = 121709, upload-time = "2025-04-14T17:59:01.618Z" }
 wheels = [
@@ -1146,7 +1241,8 @@ dependencies = [
     { name = "cycler" },
     { name = "fonttools" },
     { name = "kiwisolver" },
-    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" } },
+    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
     { name = "packaging" },
     { name = "pillow" },
     { name = "pyparsing" },
@@ -1237,10 +1333,11 @@ name = "ml-dtypes"
 version = "0.4.1"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.13'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13'" },
+    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.13' and extra == 'group-16-occam-shaving-rl-atari') or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/fd/15/76f86faa0902836cc133939732f7611ace68cf54148487a99c539c272dc8/ml_dtypes-0.4.1.tar.gz", hash = "sha256:fad5f2de464fd09127e49b7fd1252b9006fb43d2edc1ff112d390c324af5ca7a", size = 692594, upload-time = "2024-09-13T19:07:11.624Z" }
 wheels = [
@@ -1259,18 +1356,16 @@ name = "ml-dtypes"
 version = "0.5.3"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.13' and sys_platform == 'linux' and extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax'",
-    "python_full_version >= '3.13' and sys_platform != 'linux' and extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax'",
-    "python_full_version == '3.12.*' and sys_platform == 'linux' and extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax'",
-    "python_full_version == '3.12.*' and sys_platform != 'linux' and extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax'",
-    "python_full_version < '3.12' and sys_platform == 'linux' and extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax'",
-    "python_full_version < '3.12' and sys_platform != 'linux' and extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax'",
-    "python_full_version == '3.12.*' and extra == 'group-16-occam-shaving-rl-atari' and extra != 'group-16-occam-shaving-rl-brax'",
-    "python_full_version < '3.12' and extra == 'group-16-occam-shaving-rl-atari' and extra != 'group-16-occam-shaving-rl-brax'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform != 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform != 'linux'",
+    "python_full_version < '3.12' and sys_platform == 'linux'",
+    "python_full_version < '3.12' and sys_platform != 'linux'",
 ]
 dependencies = [
     { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.13' and extra == 'group-16-occam-shaving-rl-atari') or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
-    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax'" },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/78/a7/aad060393123cfb383956dca68402aff3db1e1caffd5764887ed5153f41b/ml_dtypes-0.5.3.tar.gz", hash = "sha256:95ce33057ba4d05df50b1f3cfefab22e351868a843b3b15a46c65836283670c9", size = 692316, upload-time = "2025-07-29T18:39:19.454Z" }
 wheels = [
@@ -1361,9 +1456,10 @@ version = "3.3.6"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "absl-py" },
-    { name = "etils", extra = ["epath"], marker = "extra == 'group-16-occam-shaving-rl-brax'" },
+    { name = "etils", extra = ["epath"] },
     { name = "glfw" },
-    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" } },
+    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
     { name = "pyopengl" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/22/6e/97752614df8d6d439fbbbac2507dad5a72db03295e662f5497c72dc9f9f4/mujoco-3.3.6.tar.gz", hash = "sha256:126bfb0db442eb6407776dc4f98c7c022954947931e03c395ec45fa58463fb5e", size = 815663, upload-time = "2025-09-16T00:27:44.423Z" }
@@ -1391,11 +1487,14 @@ version = "3.3.6"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "absl-py" },
-    { name = "etils", extra = ["epath"], marker = "extra == 'group-16-occam-shaving-rl-brax'" },
-    { name = "jax", version = "0.8.1", source = { registry = "https://pypi.org/simple" } },
-    { name = "jaxlib", version = "0.8.1", source = { registry = "https://pypi.org/simple" } },
+    { name = "etils", extra = ["epath"] },
+    { name = "jax", version = "0.4.20", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "jax", version = "0.8.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "jaxlib", version = "0.4.20", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "jaxlib", version = "0.8.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
     { name = "mujoco" },
-    { name = "scipy", version = "1.15.3", source = { registry = "https://pypi.org/simple" } },
+    { name = "scipy", version = "1.12.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "scipy", version = "1.15.3", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
     { name = "trimesh" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/24/4e/f3c691338245cd0c4c13facb1afb1a8560adba6e8f1e729e0965a29d01bc/mujoco_mjx-3.3.6.tar.gz", hash = "sha256:65c2231f69cf12fc10169b38b269dab9b37981f2b163fe835a24e5091ffd0268", size = 6899502, upload-time = "2025-09-16T00:35:31.906Z" }
@@ -1419,8 +1518,10 @@ source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "black" },
     { name = "flake8" },
-    { name = "flax", version = "0.12.1", source = { registry = "https://pypi.org/simple" } },
-    { name = "jax", version = "0.8.1", source = { registry = "https://pypi.org/simple" } },
+    { name = "flax", version = "0.6.11", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "flax", version = "0.12.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "jax", version = "0.4.20", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "jax", version = "0.8.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
     { name = "pillow" },
     { name = "pylint" },
     { name = "pytest" },
@@ -1449,9 +1550,12 @@ name = "numpy"
 version = "1.26.4"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.13'",
-    "python_full_version == '3.12.*'",
-    "python_full_version < '3.12'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform != 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform != 'linux'",
+    "python_full_version < '3.12' and sys_platform == 'linux'",
+    "python_full_version < '3.12' and sys_platform != 'linux'",
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/65/6e/09db70a523a96d25e115e71cc56a6f9031e7b8cd166c1ac8438307c14058/numpy-1.26.4.tar.gz", hash = "sha256:2a02aba9ed12e4ac4eb3ea9421c420301a0c6460d9830d74a9df87efa4912010", size = 15786129, upload-time = "2024-02-06T00:26:44.495Z" }
 wheels = [
@@ -1582,8 +1686,8 @@ atari = [
     { name = "scipy", version = "1.12.0", source = { registry = "https://pypi.org/simple" } },
 ]
 brax = [
-    { name = "brax" },
-    { name = "distrax" },
+    { name = "brax", version = "0.13.0", source = { registry = "https://pypi.org/simple" } },
+    { name = "distrax", version = "0.1.7", source = { registry = "https://pypi.org/simple" } },
     { name = "flax", version = "0.12.1", source = { registry = "https://pypi.org/simple" } },
     { name = "gymnax" },
     { name = "jax", version = "0.8.1", source = { registry = "https://pypi.org/simple" } },
@@ -1591,6 +1695,22 @@ brax = [
     { name = "navix" },
     { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" } },
     { name = "optax", version = "0.2.6", source = { registry = "https://pypi.org/simple" } },
+]
+minatar = [
+    { name = "brax", version = "0.12.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "brax", version = "0.13.0", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "distrax", version = "0.1.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "distrax", version = "0.1.7", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "flax", version = "0.6.11", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "flax", version = "0.12.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "gymnax" },
+    { name = "jax", version = "0.4.20", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "jax", version = "0.8.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "navix" },
+    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "optax", version = "0.1.8", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "optax", version = "0.2.6", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
 ]
 
 [package.metadata]
@@ -1618,6 +1738,16 @@ brax = [
     { name = "numpy", specifier = ">=2.3.3" },
     { name = "optax", specifier = ">=0.2.6" },
 ]
+minatar = [
+    { name = "brax", specifier = ">=0.12.5" },
+    { name = "distrax", specifier = ">=0.1.5" },
+    { name = "flax", specifier = ">=0.6.11" },
+    { name = "gymnax", specifier = ">=0.0.9" },
+    { name = "jax", specifier = ">=0.4.20" },
+    { name = "navix", specifier = ">=0.7.4" },
+    { name = "numpy", specifier = ">=1.26.4" },
+    { name = "optax", specifier = ">=0.1.8" },
+]
 
 [[package]]
 name = "opt-einsum"
@@ -1633,16 +1763,19 @@ name = "optax"
 version = "0.1.8"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.13'",
-    "python_full_version == '3.12.*'",
-    "python_full_version < '3.12'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform != 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform != 'linux'",
+    "python_full_version < '3.12' and sys_platform == 'linux'",
+    "python_full_version < '3.12' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "absl-py" },
-    { name = "chex", version = "0.1.82", source = { registry = "https://pypi.org/simple" } },
-    { name = "jax", version = "0.4.20", source = { registry = "https://pypi.org/simple" } },
-    { name = "jaxlib", version = "0.4.20", source = { registry = "https://pypi.org/simple" } },
-    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" } },
+    { name = "absl-py", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "chex", version = "0.1.82", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "jax", version = "0.4.20", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "jaxlib", version = "0.4.20", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/06/59/7e5a796ce71074ec505b475e865a0ee5e631fe7db1f2771c07b17034ab9d/optax-0.1.8.tar.gz", hash = "sha256:86820fba48c564bd6772be4f168895cdad8d8b75e45fc414e63ccfc223628c34", size = 138470, upload-time = "2024-01-15T14:59:31.848Z" }
 wheels = [
@@ -1662,11 +1795,11 @@ resolution-markers = [
     "python_full_version < '3.12' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "absl-py" },
-    { name = "chex", version = "0.1.91", source = { registry = "https://pypi.org/simple" } },
-    { name = "jax", version = "0.8.1", source = { registry = "https://pypi.org/simple" } },
-    { name = "jaxlib", version = "0.8.1", source = { registry = "https://pypi.org/simple" } },
-    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" } },
+    { name = "absl-py", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "chex", version = "0.1.91", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "jax", version = "0.8.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "jaxlib", version = "0.8.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/6d/3b/90c11f740a3538200b61cd2b7d9346959cb9e31e0bdea3d2f886b7262203/optax-0.2.6.tar.gz", hash = "sha256:ba8d1e12678eba2657484d6feeca4fb281b8066bdfd5efbfc0f41b87663109c0", size = 269660, upload-time = "2025-09-15T22:41:24.76Z" }
 wheels = [
@@ -1768,23 +1901,26 @@ name = "orbax-checkpoint"
 version = "0.5.16"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.13'",
-    "python_full_version == '3.12.*'",
-    "python_full_version < '3.12'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform != 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform != 'linux'",
+    "python_full_version < '3.12' and sys_platform == 'linux'",
+    "python_full_version < '3.12' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "absl-py" },
+    { name = "absl-py", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
     { name = "etils", extra = ["epath", "epy"], marker = "extra == 'group-16-occam-shaving-rl-atari'" },
-    { name = "jax", version = "0.4.20", source = { registry = "https://pypi.org/simple" } },
-    { name = "jaxlib", version = "0.4.20", source = { registry = "https://pypi.org/simple" } },
-    { name = "msgpack" },
-    { name = "nest-asyncio" },
-    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" } },
-    { name = "protobuf" },
-    { name = "pyyaml" },
+    { name = "jax", version = "0.4.20", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "jaxlib", version = "0.4.20", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "msgpack", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "nest-asyncio", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "protobuf", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "pyyaml", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
     { name = "tensorstore", version = "0.1.74", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.13' and extra == 'group-16-occam-shaving-rl-atari') or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
     { name = "tensorstore", version = "0.1.78", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.13' and extra == 'group-16-occam-shaving-rl-atari') or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
-    { name = "typing-extensions" },
+    { name = "typing-extensions", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/05/f3/39988acde4fa04b0017b8dec1c2cc4429c4d54830f418c80574ff6f6ff9b/orbax_checkpoint-0.5.16.tar.gz", hash = "sha256:c64d2a3ba6dd7e41330c3efd2bb669743480e62ad242eac5517e67369c26a38e", size = 160749, upload-time = "2024-06-12T00:42:43.013Z" }
 wheels = [
@@ -1804,20 +1940,20 @@ resolution-markers = [
     "python_full_version < '3.12' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "absl-py" },
-    { name = "aiofiles" },
-    { name = "etils", extra = ["epath", "epy"], marker = "extra == 'group-16-occam-shaving-rl-brax'" },
-    { name = "humanize" },
-    { name = "jax", version = "0.8.1", source = { registry = "https://pypi.org/simple" } },
-    { name = "msgpack" },
-    { name = "nest-asyncio" },
-    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" } },
-    { name = "protobuf" },
-    { name = "psutil" },
-    { name = "pyyaml" },
-    { name = "simplejson" },
-    { name = "tensorstore", version = "0.1.78", source = { registry = "https://pypi.org/simple" } },
-    { name = "typing-extensions" },
+    { name = "absl-py", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "aiofiles", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "etils", extra = ["epath", "epy"], marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "humanize", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "jax", version = "0.8.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "msgpack", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "nest-asyncio", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "protobuf", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "psutil", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "pyyaml", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "simplejson", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "tensorstore", version = "0.1.78", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "typing-extensions", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/26/0a/6cda861d9a9df6681126128c4f8417b692c4e8fbff2d9f643fc99c716679/orbax_checkpoint-0.11.30.tar.gz", hash = "sha256:5395e9fc80b750ee3644ee19f969923c7e3c83369133da5ea256a86d9bb838a6", size = 402806, upload-time = "2025-11-27T07:58:52.736Z" }
 wheels = [
@@ -1838,7 +1974,8 @@ name = "pandas"
 version = "2.3.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" } },
+    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
     { name = "python-dateutil" },
     { name = "pytz" },
     { name = "tzdata" },
@@ -2175,7 +2312,7 @@ version = "3.3.9"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "astroid" },
-    { name = "colorama", marker = "sys_platform == 'win32'" },
+    { name = "colorama", marker = "sys_platform == 'win32' or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
     { name = "dill" },
     { name = "isort" },
     { name = "mccabe" },
@@ -2210,7 +2347,7 @@ name = "pytest"
 version = "8.4.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "colorama", marker = "sys_platform == 'win32'" },
+    { name = "colorama", marker = "sys_platform == 'win32' or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
     { name = "iniconfig" },
     { name = "packaging" },
     { name = "pluggy" },
@@ -2340,12 +2477,17 @@ version = "0.1.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "absl-py" },
-    { name = "chex", version = "0.1.91", source = { registry = "https://pypi.org/simple" } },
-    { name = "distrax" },
+    { name = "chex", version = "0.1.82", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "chex", version = "0.1.91", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "distrax", version = "0.1.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "distrax", version = "0.1.7", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
     { name = "dm-env" },
-    { name = "jax", version = "0.8.1", source = { registry = "https://pypi.org/simple" } },
-    { name = "jaxlib", version = "0.8.1", source = { registry = "https://pypi.org/simple" } },
-    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" } },
+    { name = "jax", version = "0.4.20", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "jax", version = "0.8.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "jaxlib", version = "0.4.20", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "jaxlib", version = "0.8.1", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/30/ca/7346c802607b007acc78f49511bb90fb0c71a4bc35c940d3ae59e024dc3c/rlax-0.1.7.tar.gz", hash = "sha256:15a36b23d137b847c2fb77b87c0d2a54cad4f473b14b0ff63e2bc24d2d2cdabf", size = 93908, upload-time = "2025-05-08T14:48:32.948Z" }
 wheels = [
@@ -2357,12 +2499,15 @@ name = "scipy"
 version = "1.12.0"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.13'",
-    "python_full_version == '3.12.*'",
-    "python_full_version < '3.12'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform != 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform != 'linux'",
+    "python_full_version < '3.12' and sys_platform == 'linux'",
+    "python_full_version < '3.12' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" } },
+    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/30/85/cdbf2c3c460fe5aae812917866392068a88d02f07de0fe31ce738734c477/scipy-1.12.0.tar.gz", hash = "sha256:4bf5abab8a36d20193c698b0f1fc282c1d083c94723902c447e5d2f1780936a3", size = 56811768, upload-time = "2024-01-20T21:13:43.442Z" }
 wheels = [
@@ -2393,7 +2538,7 @@ resolution-markers = [
     "python_full_version < '3.12' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" } },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/0f/37/6964b830433e654ec7485e45a00fc9a27cf868d622838f6b6d9c5ec0d532/scipy-1.15.3.tar.gz", hash = "sha256:eae3cf522bc7df64b42cad3925c876e1b0b6c35c1337c93e12c0f366f55b0eaf", size = 59419214, upload-time = "2025-05-08T16:13:05.955Z" }
 wheels = [
@@ -2441,7 +2586,8 @@ version = "0.13.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "matplotlib" },
-    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" } },
+    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
     { name = "pandas" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/86/59/a451d7420a77ab0b98f7affa3a1d78a313d2f7281a57afb1a34bae8ab412/seaborn-0.13.2.tar.gz", hash = "sha256:93e60a40988f4d65e9f4885df477e2fdaff6b73a9ded434c1ab356dd57eefff7", size = 1457696, upload-time = "2024-01-25T13:21:52.551Z" }
@@ -2564,7 +2710,8 @@ name = "tensorboardx"
 version = "2.6.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" } },
+    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
     { name = "packaging" },
     { name = "protobuf" },
 ]
@@ -2574,15 +2721,34 @@ wheels = [
 ]
 
 [[package]]
+name = "tensorflow-probability"
+version = "0.25.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "absl-py", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "cloudpickle", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "decorator", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "dm-tree", version = "0.1.8", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.13' and extra == 'group-16-occam-shaving-rl-atari') or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
+    { name = "dm-tree", version = "0.1.9", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.13' and extra == 'group-16-occam-shaving-rl-atari') or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
+    { name = "gast", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "six", marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+]
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/fe/b6/e116761ceeb880b7ad4c6a7e1203538754dd7dda42538f08d6daaf8dfa4d/tensorflow_probability-0.25.0-py2.py3-none-any.whl", hash = "sha256:f3f4d6431656c0122906888afe1b67b4400e82bd7f254b45b92e6c5b84ea8e3e", size = 6979403, upload-time = "2024-11-08T16:25:57.238Z" },
+]
+
+[[package]]
 name = "tensorstore"
 version = "0.1.74"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.13'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "ml-dtypes", version = "0.4.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13'" },
-    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13'" },
+    { name = "ml-dtypes", version = "0.4.1", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.13' and extra == 'group-16-occam-shaving-rl-atari') or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
+    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version >= '3.13' and extra == 'group-16-occam-shaving-rl-atari') or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/3c/b9/ea25aba62c688a87d7d7d9cc5926d602e2f9e84fa72586825486fb180b7e/tensorstore-0.1.74.tar.gz", hash = "sha256:a062875f27283d30ce4959c408c253ecb336fce8e3f9837c064e3d30cda79203", size = 6795605, upload-time = "2025-04-24T15:42:18.829Z" }
 wheels = [
@@ -2608,19 +2774,17 @@ name = "tensorstore"
 version = "0.1.78"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
-    "python_full_version >= '3.13' and sys_platform == 'linux' and extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax'",
-    "python_full_version >= '3.13' and sys_platform != 'linux' and extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax'",
-    "python_full_version == '3.12.*' and sys_platform == 'linux' and extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax'",
-    "python_full_version == '3.12.*' and sys_platform != 'linux' and extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax'",
-    "python_full_version < '3.12' and sys_platform == 'linux' and extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax'",
-    "python_full_version < '3.12' and sys_platform != 'linux' and extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax'",
-    "python_full_version == '3.12.*' and extra == 'group-16-occam-shaving-rl-atari' and extra != 'group-16-occam-shaving-rl-brax'",
-    "python_full_version < '3.12' and extra == 'group-16-occam-shaving-rl-atari' and extra != 'group-16-occam-shaving-rl-brax'",
+    "python_full_version >= '3.13' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and sys_platform != 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and sys_platform != 'linux'",
+    "python_full_version < '3.12' and sys_platform == 'linux'",
+    "python_full_version < '3.12' and sys_platform != 'linux'",
 ]
 dependencies = [
-    { name = "ml-dtypes", version = "0.5.3", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.13' and extra == 'group-16-occam-shaving-rl-atari') or (python_full_version >= '3.13' and extra == 'group-16-occam-shaving-rl-brax') or (extra != 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
+    { name = "ml-dtypes", version = "0.5.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.13' or extra != 'group-16-occam-shaving-rl-atari' or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
     { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "(python_full_version < '3.13' and extra == 'group-16-occam-shaving-rl-atari') or (extra == 'group-16-occam-shaving-rl-atari' and extra == 'group-16-occam-shaving-rl-brax')" },
-    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax'" },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/9f/ee/05eb424437f4db63331c90e4605025eedc0f71da3faff97161d5d7b405af/tensorstore-0.1.78.tar.gz", hash = "sha256:e26074ffe462394cf54197eb76d6569b500f347573cd74da3f4dd5f510a4ad7c", size = 6913502, upload-time = "2025-10-06T17:44:29.649Z" }
 wheels = [
@@ -2646,13 +2810,13 @@ name = "tfp-nightly"
 version = "0.26.0.dev20251209"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "absl-py" },
-    { name = "cloudpickle" },
-    { name = "decorator" },
-    { name = "dm-tree", version = "0.1.9", source = { registry = "https://pypi.org/simple" } },
-    { name = "gast" },
-    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" } },
-    { name = "six" },
+    { name = "absl-py", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "cloudpickle", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "decorator", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "dm-tree", version = "0.1.9", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "gast", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
+    { name = "six", marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
 ]
 wheels = [
     { url = "https://files.pythonhosted.org/packages/a3/61/ff8e7d484ad6fba26a5a76252c2b85071653f1992a92d910d113f67b01ea/tfp_nightly-0.26.0.dev20251209-py2.py3-none-any.whl", hash = "sha256:4aeb4e642a549525ae0081dc46b12ccfd0c57bb9c1cec22b3530fd9a18f47715", size = 6975585, upload-time = "2025-12-09T09:44:07.973Z" },
@@ -2681,7 +2845,7 @@ name = "treescope"
 version = "0.1.10"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" } },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/f0/2a/d13d3c38862632742d2fe2f7ae307c431db06538fd05ca03020d207b5dcc/treescope-0.1.10.tar.gz", hash = "sha256:20f74656f34ab2d8716715013e8163a0da79bdc2554c16d5023172c50d27ea95", size = 138870, upload-time = "2025-08-08T05:43:48.048Z" }
 wheels = [
@@ -2693,7 +2857,8 @@ name = "trimesh"
 version = "4.8.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" } },
+    { name = "numpy", version = "1.26.4", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-atari'" },
+    { name = "numpy", version = "2.3.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-16-occam-shaving-rl-brax' or extra != 'group-16-occam-shaving-rl-atari'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/be/17/9799bd734de0aa75332727b10ecf56e2c93efa70dfc7a2966bed33539ef5/trimesh-4.8.3.tar.gz", hash = "sha256:d2a1974efccb0737a1faac14d69740c644bb6738a99c790c1df752fe72c2a759", size = 831222, upload-time = "2025-09-26T20:07:59.595Z" }
 wheels = [

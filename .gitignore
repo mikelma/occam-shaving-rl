@@ -2,6 +2,7 @@
 runs/
 wandb/
 data/
+logs/
 *.bin
 
 # Byte-compiled / optimized / DLL files
