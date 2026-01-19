@@ -50,6 +50,86 @@ META_CONFIG = {
             #     "critic": ["glorot_u"],
             # },
         ],
+        # TODO decide hyperparam. options
+        "minatar": {
+            # constants
+            "ENV_NAME": "Breakout-MinAtar",
+            "DEBUG": True,
+            "LOG_DIR": "logs/",
+            "NUM_PARALLEL_RUNS": 30,
+            "VF_COEF": 0.5,
+            "NUM_STEPS": 128,
+            "TOTAL_TIMESTEPS": 1e6,  # NOTE original was 1e7
+            "GAMMA": 0.99,
+            "SPLIT_AC": True,
+            "HIDDEN_DIM": 64,
+            "NUM_ENVS": 64,
+            "ACTIVATION": "relu",  # NOTE fancy activations?
+            "USE_MUON": False,
+            # variables
+            "LR": 5e-3,
+            "ENT_COEF": 0.01,
+            "UPDATE_EPOCHS": 4,
+            "NUM_MINIBATCHES": 8,
+            "GAE_LAMBDA": 0.95,
+            "CLIP_EPS": 0.2,
+            "CLIP_VALUE_EPS": 0.2,
+            "MAX_GRAD_NORM": 0.5,
+            "ANNEAL_LR": True,
+            # NOTE NORMALIZE_ENV not relevant, obs are flattened 10x10xN one-hot grids (N = num obj classes)
+            "GAE_NORMALIZATION": True,
+            "LAYER_NORM": False,
+            "INITIALIZERS": [
+                # original
+                {
+                    "shared": ["orthogonal", np.sqrt(2)],
+                    "actor": ["orthogonal", 0.01],
+                    "critic": ["orthogonal", 1],
+                },
+                # higher variance in actor's last layer
+                {
+                    "shared": ["orthogonal", np.sqrt(2)],
+                    "actor": ["orthogonal", 1],
+                    "critic": ["orthogonal", 1],
+                },
+            ],
+        },
+    },
+    "minatar_baseline": {
+        # constants
+        "ENV_NAME": "Breakout-MinAtar",
+        "DEBUG": True,
+        "LOG_DIR": "logs/",
+        "NUM_PARALLEL_RUNS": 30,
+        "VF_COEF": 0.5,
+        "NUM_STEPS": 128,
+        "TOTAL_TIMESTEPS": 1e6,  # NOTE original was 1e7
+        "GAMMA": 0.99,
+        "SPLIT_AC": True,
+        "HIDDEN_DIM": 64,
+        "NUM_ENVS": 64,
+        "ACTIVATION": "relu",  # NOTE fancy activations?
+        "USE_MUON": False,
+        # variables
+        "LR": 5e-3,
+        "ENT_COEF": 0.01,
+        "UPDATE_EPOCHS": 4,
+        "NUM_MINIBATCHES": 8,
+        "GAE_LAMBDA": 0.95,
+        "CLIP_EPS": 0.2,
+        "CLIP_VALUE_EPS": 0.2,
+        "MAX_GRAD_NORM": 0.5,
+        "ANNEAL_LR": True,
+        # NOTE NORMALIZE_ENV not relevant, obs are flattened 10x10xN one-hot grids (N = num obj classes)
+        "GAE_NORMALIZATION": True,
+        "LAYER_NORM": False,
+        "INITIALIZERS": [
+            {
+                "shared": ["orthogonal", np.sqrt(2)],
+                "actor": ["orthogonal", 0.01],
+                "critic": ["orthogonal", 1],
+            },
+        ],
     },
     "atari": {
         # constants
