@@ -126,18 +126,18 @@ META_CONFIG = {
         "LOG_DIR": "brax_baseline_logs/",
         "NUM_PARALLEL_RUNS": 30,
         "VF_COEF": 0.5,
-        "NUM_STEPS": 10,
+        "NUM_STEPS": 10,  # brax (unroll_length): 5
         "TOTAL_TIMESTEPS": 1e6,
         "USE_MUON": False,
-        "GAMMA": 0.99,
+        "GAMMA": 0.99,  # brax: 0.95
         "LR": 3e-4,
         "NUM_ENVS": 2048,
         "UPDATE_EPOCHS": 4,
-        "NUM_MINIBATCHES": 32,
+        "NUM_MINIBATCHES": 32,  # brax: 16
         "GAE_LAMBDA": 0.95,
         "CLIP_EPS": 0.2,
         "CLIP_VALUE_EPS": 0.2,
-        "ENT_COEF": 0.0,
+        "ENT_COEF": 0.0,  # brax: 1e-3
         "MAX_GRAD_NORM": 0.5,
         "ACTIVATION": "tanh",
         "ANNEAL_LR": False,
@@ -153,5 +153,5 @@ META_CONFIG = {
                 "critic": ["orthogonal", 1],
             },
         ],
-    }
+    },
 }
