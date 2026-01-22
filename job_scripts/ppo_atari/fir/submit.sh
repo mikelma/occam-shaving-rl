@@ -13,5 +13,5 @@ virtualenv $SLURM_TMPDIR/env
 source $SLURM_TMPDIR/env/bin/activate
 python -m pip install --upgrade pip==23.3.1
 
-python -m pip install --no-index -r requirements/requirements-ppo-atari.txt
+python -m pip install --no-index -r requirements/ppo_atari/requirements-ppo-atari.txt
 python cleanrl/ppo_atari_envpool_xla_jax_scan.py
