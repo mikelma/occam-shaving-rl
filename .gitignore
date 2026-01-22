@@ -221,3 +221,6 @@ wandb/*
 .idea
 scratch
 testing.ipynb
+.DS_Store
+graphs
+configs
