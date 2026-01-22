@@ -12,17 +12,17 @@ META_CONFIG = {
         "LOG_DIR": "logs/",
         "NUM_PARALLEL_RUNS": 30,
         "VF_COEF": 0.5,
-        "NUM_STEPS": 10,
-        "TOTAL_TIMESTEPS": 1e6,
+        "TOTAL_TIMESTEPS": 3e6,
         "USE_MUON": False,
-        "GAMMA": 0.99,
         "SPLIT_AC": False,
-        "HIDDEN_DIM": 64,
+        "HIDDEN_DIM": 256,
         "NUM_ENVS": 2048,
         "ACTIVATION": "tanh",
         # variables
+        "NUM_STEPS": [5, 10],
+        "GAMMA": [0.99, 0.95],
         "LR": [3e-3, 3e-4, 3e-5],
-        "ENT_COEF": [0.0, 0.01, 0.1],
+        "ENT_COEF": [0.0, 0.001, 0.01],
         "UPDATE_EPOCHS": [1, 4],
         "NUM_MINIBATCHES": [16, 32, 64],
         "GAE_LAMBDA": [0.9, 0.95],
@@ -44,11 +44,6 @@ META_CONFIG = {
                 "actor": ["orthogonal", 1],
                 "critic": ["orthogonal", 1],
             },
-            # {
-            #     "shared": ["glorot_u"],
-            #     "actor": ["glorot_u"],
-            #     "critic": ["glorot_u"],
-            # },
         ],
         # TODO decide hyperparam. options
         "minatar": {
@@ -198,5 +193,145 @@ META_CONFIG = {
         "anneal_lr": True,
         "norm_adv": True,
         "layer_norm": False,
+    },
+    "brax_baseline": {
+        # constants
+        "ENV_NAME": ["walker2d", "ant", "humanoid"],
+        "DEBUG": False,
+        "LOG_DIR": "brax_baseline_logs/",
+        "NUM_PARALLEL_RUNS": 30,
+        "VF_COEF": 0.5,
+        "NUM_STEPS": 10,  # brax (unroll_length): 5
+        "TOTAL_TIMESTEPS": 1e6,
+        "USE_MUON": False,
+        "GAMMA": 0.99,  # brax: 0.95
+        "LR": 3e-4,
+        "NUM_ENVS": 2048,
+        "UPDATE_EPOCHS": 4,
+        "NUM_MINIBATCHES": 32,  # brax: 16
+        "GAE_LAMBDA": 0.95,
+        "CLIP_EPS": 0.2,
+        "CLIP_VALUE_EPS": 0.2,
+        "ENT_COEF": 0.0,  # brax: 1e-3
+        "MAX_GRAD_NORM": 0.5,
+        "ACTIVATION": "tanh",
+        "ANNEAL_LR": False,
+        "NORMALIZE_ENV": True,
+        "GAE_NORMALIZATION": True,
+        "SPLIT_AC": False,
+        "HIDDEN_DIM": 256,
+        "LAYER_NORM": False,
+        "INITIALIZERS": [
+            {
+                "shared": ["orthogonal", np.sqrt(2)],
+                "actor": ["orthogonal", 0.01],
+                "critic": ["orthogonal", 1],
+            },
+        ],
+    },
+    "brax_longer_timestep_baseline": {
+        # constants
+        "ENV_NAME": ["walker2d", "ant", "humanoid"],
+        "DEBUG": False,
+        "LOG_DIR": "brax_longer_timestep_baseline_logs/",
+        "NUM_PARALLEL_RUNS": 30,
+        "VF_COEF": 0.5,
+        "NUM_STEPS": 10,  # brax (unroll_length): 5
+        "TOTAL_TIMESTEPS": [3e6, 5e6],
+        "USE_MUON": False,
+        "GAMMA": 0.99,  # brax: 0.95
+        "LR": 3e-4,
+        "NUM_ENVS": 2048,
+        "UPDATE_EPOCHS": 4,
+        "NUM_MINIBATCHES": 32,  # brax: 16
+        "GAE_LAMBDA": 0.95,
+        "CLIP_EPS": 0.2,
+        "CLIP_VALUE_EPS": 0.2,
+        "ENT_COEF": 0.0,  # brax: 1e-3
+        "MAX_GRAD_NORM": 0.5,
+        "ACTIVATION": "tanh",
+        "ANNEAL_LR": False,
+        "NORMALIZE_ENV": True,
+        "GAE_NORMALIZATION": True,
+        "SPLIT_AC": False,
+        "HIDDEN_DIM": 256,
+        "LAYER_NORM": False,
+        "INITIALIZERS": [
+            {
+                "shared": ["orthogonal", np.sqrt(2)],
+                "actor": ["orthogonal", 0.01],
+                "critic": ["orthogonal", 1],
+            },
+        ],
+    },
+    "brax_paper_baseline": {
+        # constants
+        "ENV_NAME": ["walker2d", "ant", "humanoid"],
+        "DEBUG": False,
+        "LOG_DIR": "brax_paper_baseline_logs/",
+        "NUM_PARALLEL_RUNS": 30,
+        "VF_COEF": 0.5,
+        "NUM_STEPS": 5,  # brax (unroll_length): 5
+        "TOTAL_TIMESTEPS": [1e6, 3e6, 5e6],
+        "USE_MUON": False,
+        "GAMMA": 0.95,  # brax: 0.95
+        "LR": 3e-4,
+        "NUM_ENVS": 2048,
+        "UPDATE_EPOCHS": 4,
+        "NUM_MINIBATCHES": 16,  # brax: 16
+        "GAE_LAMBDA": 0.95,
+        "CLIP_EPS": 0.2,
+        "CLIP_VALUE_EPS": 0.2,
+        "ENT_COEF": 1e-3,  # brax: 1e-3
+        "MAX_GRAD_NORM": 0.5,
+        "ACTIVATION": "tanh",
+        "ANNEAL_LR": False,
+        "NORMALIZE_ENV": True,
+        "GAE_NORMALIZATION": True,
+        "SPLIT_AC": False,
+        "HIDDEN_DIM": 256,
+        "LAYER_NORM": False,
+        "INITIALIZERS": [
+            {
+                "shared": ["orthogonal", np.sqrt(2)],
+                "actor": ["orthogonal", 0.01],
+                "critic": ["orthogonal", 1],
+            },
+        ],
+    },
+    "brax_with_layernorm_baseline": {
+        # constants
+        "ENV_NAME": ["walker2d", "ant", "humanoid"],
+        "DEBUG": False,
+        "LOG_DIR": "brax_with_layernorm_baseline_logs/",
+        "NUM_PARALLEL_RUNS": 30,
+        "VF_COEF": 0.5,
+        "NUM_STEPS": [5, 10],
+        "TOTAL_TIMESTEPS": 3e6,
+        "USE_MUON": False,
+        "GAMMA": [0.99, 0.95],  # brax: 0.95
+        "LR": 3e-4,
+        "NUM_ENVS": 2048,
+        "UPDATE_EPOCHS": 4,
+        "NUM_MINIBATCHES": [16, 32],  # brax: 16
+        "GAE_LAMBDA": 0.95,
+        "CLIP_EPS": 0.2,
+        "CLIP_VALUE_EPS": 0.2,
+        "ENT_COEF": [0.0, 1e-3],  # brax: 1e-3
+        "MAX_GRAD_NORM": 0.5,
+        "ACTIVATION": "tanh",
+        "ANNEAL_LR": False,
+        "NORMALIZE_ENV": True,
+        "GAE_NORMALIZATION": True,
+        "SPLIT_AC": False,
+        "HIDDEN_DIM": 256,
+        "LAYER_NORM": True,
+        "INITIALIZERS": [
+            {
+                "shared": ["orthogonal", np.sqrt(2)],
+                "actor": ["orthogonal", 0.01],
+                "critic": ["orthogonal", 1],
+            },
+        ],
     },
 }
