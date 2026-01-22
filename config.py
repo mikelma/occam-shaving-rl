@@ -219,4 +219,39 @@ META_CONFIG = {
             },
         ],
     },
+    "brax_with_layernorm_baseline": {
+        # constants
+        "ENV_NAME": ["walker2d", "ant", "humanoid"],
+        "DEBUG": False,
+        "LOG_DIR": "brax_with_layernorm_baseline_logs/",
+        "NUM_PARALLEL_RUNS": 30,
+        "VF_COEF": 0.5,
+        "NUM_STEPS": [5, 10],
+        "TOTAL_TIMESTEPS": 3e6,
+        "USE_MUON": False,
+        "GAMMA": [0.99, 0.95],  # brax: 0.95
+        "LR": 3e-4,
+        "NUM_ENVS": 2048,
+        "UPDATE_EPOCHS": 4,
+        "NUM_MINIBATCHES": [16, 32],  # brax: 16
+        "GAE_LAMBDA": 0.95,
+        "CLIP_EPS": 0.2,
+        "CLIP_VALUE_EPS": 0.2,
+        "ENT_COEF": [0.0, 1e-3],  # brax: 1e-3
+        "MAX_GRAD_NORM": 0.5,
+        "ACTIVATION": "tanh",
+        "ANNEAL_LR": False,
+        "NORMALIZE_ENV": True,
+        "GAE_NORMALIZATION": True,
+        "SPLIT_AC": False,
+        "HIDDEN_DIM": 256,
+        "LAYER_NORM": True,
+        "INITIALIZERS": [
+            {
+                "shared": ["orthogonal", np.sqrt(2)],
+                "actor": ["orthogonal", 0.01],
+                "critic": ["orthogonal", 1],
+            },
+        ],
+    },
 }
