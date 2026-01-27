@@ -50,7 +50,7 @@ META_CONFIG = {
         # constants
         "ENV_NAME": ["walker2d", "ant", "humanoid"],
         "DEBUG": False,
-        "LOG_DIR": "logs/",
+        "LOG_DIR": "logs/brax_small/",
         "NUM_PARALLEL_RUNS": 30,
         "VF_COEF": 0.5,
         "TOTAL_TIMESTEPS": 3e6,
