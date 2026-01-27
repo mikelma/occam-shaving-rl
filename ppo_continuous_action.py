@@ -11,7 +11,7 @@ import copy
 import os
 from dataclasses import dataclass
 import msgpack
-from purejaxrl.purejaxrl.wrappers import (
+from wrappers import (
     LogWrapper,
     BraxGymnaxWrapper,
     VecEnv,
