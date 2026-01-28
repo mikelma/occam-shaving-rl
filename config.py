@@ -87,11 +87,11 @@ META_CONFIG = {
             },
         ],
     },
-    "minatar_simple": {
+    "minatar_small": {
         # constants
         "ENV_NAME": "Breakout-MinAtar",
         "DEBUG": True,
-        "LOG_DIR": "logs/",
+        "LOG_DIR": "logs/minatar_small/",
         "NUM_PARALLEL_RUNS": 30,
         "VF_COEF": 0.5,
         "NUM_STEPS": 128,
