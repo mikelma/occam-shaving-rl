@@ -13,7 +13,10 @@ import msgpack
 import copy
 import os
 from dataclasses import dataclass
-from purejaxrl.purejaxrl.wrappers import LogWrapper, FlattenObservationWrapper
+from wrappers import (
+    LogWrapper,
+    FlattenObservationWrapper
+)
 
 
 @dataclass
