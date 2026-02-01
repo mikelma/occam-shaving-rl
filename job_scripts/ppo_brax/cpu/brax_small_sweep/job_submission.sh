@@ -4,7 +4,7 @@
 #SBATCH --mem=16000M
 #SBATCH --time=02:59:00
 #SBATCH --output=ppo_brax/cpu/brax_small_sweep/brax_small_sweep_%A_%a.out
-#SBATCH --array=0-3
+#SBATCH --array=0-13823
 
 module load python/3.12 mujoco/3.3.0
 
