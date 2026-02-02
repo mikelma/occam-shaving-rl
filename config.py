@@ -90,7 +90,7 @@ META_CONFIG = {
     "minatar_small": {
         # constants
         "ENV_NAME": ["Breakout-MinAtar", "Asterix-MinAtar", "SpaceInvaders-MinAtar"],
-        "DEBUG": True,
+        "DEBUG": False,
         "LOG_DIR": "logs/minatar_small/",
         "NUM_PARALLEL_RUNS": 30,
         "VF_COEF": 0.5,
