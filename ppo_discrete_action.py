@@ -13,10 +13,7 @@ import msgpack
 import copy
 import os
 from dataclasses import dataclass
-from wrappers import (
-    LogWrapper,
-    FlattenObservationWrapper
-)
+from wrappers import LogWrapper, FlattenObservationWrapper
 
 
 @dataclass
@@ -436,6 +433,12 @@ if __name__ == "__main__":
     config = copy.deepcopy(config_readable)
     config["INITIALIZERS"] = make_initializers(config_readable["INITIALIZERS"])
 
+    runs_dir = f"{config['LOG_DIR']}/minatar_{args.id}"
+
+    if os.path.exists(f"{runs_dir}/minatar_{args.id}.csv"):
+        print("[*] Results already exists. Not running.")
+        quit()
+
     rng = jax.random.PRNGKey(args.id)
 
     keys = jax.random.split(rng, num=config["NUM_PARALLEL_RUNS"])
@@ -454,7 +457,6 @@ if __name__ == "__main__":
 
     global_steps = config["NUM_ENVS"] * jnp.arange(1, ep_lens.shape[1] + 1)
 
-    runs_dir = f"{config['LOG_DIR']}/minatar_{args.id}"
     if not os.path.exists(runs_dir):
         os.makedirs(runs_dir)
 
