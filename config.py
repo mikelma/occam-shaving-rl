@@ -237,7 +237,7 @@ META_CONFIG = {
         # constants
         "ENV_NAME": ["walker2d", "ant", "humanoid"],
         "DEBUG": False,
-        "LOG_DIR": "brax_baseline_logs/",
+        "LOG_DIR": "brax_baseline_logs/randomized_reset/",
         "NUM_PARALLEL_RUNS": 30,
         "VF_COEF": 0.5,
         "NUM_STEPS": 10,  # brax (unroll_length): 5
