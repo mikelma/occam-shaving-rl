@@ -16,4 +16,4 @@ mkdir $SLURM_TMPDIR/wheels
 python -m pip download -d $SLURM_TMPDIR/wheels --no-deps flashbax navix rlax==0.1.6
 
 python -m pip install --no-index --find-links $SLURM_TMPDIR/wheels/ -r requirements/ppo_brax/cpu/ppo_brax_compute_canada_requirements.txt
-python ppo_continuous_action.py --id ${SLURM_ARRAY_TASK_ID} --confs "brax_baseline_with_layernorm.bin"
+python ppo_continuous_action.py --id ${SLURM_ARRAY_TASK_ID} --confs "brax_baseline_with_auto_reset.bin"
