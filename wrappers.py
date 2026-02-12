@@ -10,6 +10,8 @@ from brax import envs
 from brax.envs.wrappers.training import EpisodeWrapper, AutoResetWrapper
 import navix as nx
 
+from brax_wrapper_code import RandomizedAutoResetWrapper
+
 
 class GymnaxWrapper(object):
     """Base class for Gymnax wrappers."""
@@ -118,7 +120,7 @@ class BraxGymnaxWrapper:
     def __init__(self, env_name, backend="positional"):
         env = envs.get_environment(env_name=env_name, backend=backend)
         env = EpisodeWrapper(env, episode_length=1000, action_repeat=1)
-        env = AutoResetWrapper(env)
+        env = RandomizedAutoResetWrapper(env)
         self._env = env
         self.action_size = env.action_size
         self.observation_size = (env.observation_size,)

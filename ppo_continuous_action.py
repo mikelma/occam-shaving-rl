@@ -177,7 +177,7 @@ def make_train(config):
     )
     env, env_params = BraxGymnaxWrapper(config["ENV_NAME"]), None
     # If you want randomized resetting
-    env = RandomizedAutoResetWrapper(env)
+    # env = RandomizedAutoResetWrapper(env)
 
     env = LogWrapper(env)
     env = ClipAction(env)
