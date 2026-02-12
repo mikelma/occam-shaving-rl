@@ -18,7 +18,7 @@ class RandomizedAutoResetWrapper(Wrapper):
     Automatically resets Brax envs that are done. and mask the goal observation.
     Force resample every step.
     """
-    def reset(self, rng: jnp.ndarray) -> State:
+    def reset(self, rng: jnp.ndarray, env_params=None) -> State:
         rng, _rng = jax.random.split(rng)
         state = self.env.reset(_rng)
         state.info['rng'] = rng
