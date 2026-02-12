@@ -12,7 +12,6 @@ import os
 from dataclasses import dataclass
 import msgpack
 
-from brax_wrapper_code import RandomizedAutoResetWrapper
 from wrappers import (
     LogWrapper,
     BraxGymnaxWrapper,
