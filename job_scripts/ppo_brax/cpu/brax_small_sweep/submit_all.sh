@@ -20,5 +20,5 @@ for (( OFFSET=0; OFFSET<$TOTAL_TASKS; OFFSET+=$CHUNK_SIZE )); do
     echo "Submitting array $ARRAY_RANGE with OFFSET $OFFSET..."
 
     # Submit and pass the OFFSET as an environment variable
-    sbatch --array=$ARRAY_RANGE --export=ALL,OFFSET=$OFFSET job_submission.sh
+    sbatch --array=$ARRAY_RANGE --export=ALL,OFFSET=$OFFSET job_scripts/ppo_brax/cpu/brax_small_sweep/job_submission.sh
 done
