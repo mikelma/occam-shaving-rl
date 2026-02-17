@@ -12,17 +12,18 @@
 # ]
 # ///
 
-import pandas as pd
-import seaborn as sns
+import glob
+import pprint
+
 import matplotlib.pyplot as plt
 import msgpack
-import pprint
-import glob
-import polars as pl
-from tqdm import tqdm
 import numpy as np
-from tyro.extras import SubcommandApp
+import pandas as pd
+import polars as pl
+import seaborn as sns
 from sklearn.manifold import TSNE
+from tqdm import tqdm
+from tyro.extras import SubcommandApp
 
 import config
 
@@ -70,16 +71,28 @@ def perf_distrib(cfg: str, dir: str):
 
     if "minatar" in dir:
         subkey = "minatar_small"
+        default_config = config.META_CONFIG["minatar_baseline"]
     else:
         raise NotImplementedError()
 
     dfs = []
     cfg_vecs = []
     i = 0
-    for path in tqdm(glob.glob(dir + "/*/*")):
+    config_id = None
+    for i, path in tqdm(enumerate(glob.glob(dir + "/*/*"))):
         run_id = int(path.split("/")[-1].split("_")[-1].split(".")[0])
 
         cfg = configs[run_id]
+        equal = True
+        for key, value in default_config.items():
+            if cfg[key] != value:
+                equal = False
+                break
+
+        if equal:
+            print("Found default config!")
+            config_id = i
+
         cfg_vecs.append(config_to_vec(cfg, subkey))
 
         df = pl.read_csv(path)
@@ -89,8 +102,12 @@ def perf_distrib(cfg: str, dir: str):
         dfs.append(df)
 
         i += 1
-        # if i == 100:
-        #     break
+        if i == 100:
+            break
+
+    config_id = 12
+    assert config_id is not None, "Cannot find default config"
+    print("Default config id:", config_id)
 
     cfg_vecs = np.vstack(cfg_vecs)
     print("Shape of config vectors:", cfg_vecs.shape)
@@ -99,10 +116,10 @@ def perf_distrib(cfg: str, dir: str):
     # vecs_max = cfg_vecs.max(axis=0)
     # cfg_vecs = (cfg_vecs - vecs_min) / (vecs_max - vecs_min)
 
-    # FIX as we're using the index of hyperparameters: option 2 is closer to option 3 than to option 5 (we have to fix this)
-    cfg_low_dim = TSNE(
-        n_components=2, learning_rate="auto", init="random", perplexity=3
-    ).fit_transform(cfg_vecs)
+    # # FIX as we're using the index of hyperparameters: option 2 is closer to option 3 than to option 5 (we have to fix this)
+    # cfg_low_dim = TSNE(
+    #     n_components=2, learning_rate="auto", init="random", perplexity=3
+    # ).fit_transform(cfg_vecs)
 
     # cols: id, seed, auc
     df = pl.concat(dfs)
@@ -116,14 +133,20 @@ def perf_distrib(cfg: str, dir: str):
         .with_columns(((pl.col("auc") - q_5) / (q_95 - q_5)).alias("auc_norm"))
     )
 
-    print(cfg_low_dim.shape)
-    print(df_norm["auc_norm"])
+    # print(cfg_low_dim.shape)
+    print(df_norm)
 
-    plt.scatter(x=cfg_low_dim[:, 0], y=cfg_low_dim[:, 1], c=df_norm["auc_norm"])
-    cbar = plt.colorbar()
-    cbar.set_label("Normalized performance", rotation=270)
-    plt.xlabel("X1")
-    plt.ylabel("X2")
+    # plt.scatter(x=cfg_low_dim[:, 0], y=cfg_low_dim[:, 1], c=df_norm["auc_norm"])
+    # cbar = plt.colorbar()
+    # cbar.set_label("Normalized performance", rotation=270)
+    # plt.xlabel("X1")
+    # plt.ylabel("X2")
+
+    defaults_perf = df_norm.filter(pl.col("id") == config_id)["auc_norm"].item()
+    sns.kdeplot(data=df_norm, x="auc_norm")
+    plt.axvline(x=defaults_perf, color="tab:grey", label="baseline")
+    plt.legend()
+    plt.xlabel("Normalized performance")
     plt.show()
 
 
