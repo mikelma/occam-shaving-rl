@@ -176,9 +176,9 @@ META_CONFIG = {
     },
     "minatar_baseline": {
         # constants
-        "ENV_NAME": "Breakout-MinAtar",
-        "DEBUG": True,
-        "LOG_DIR": "logs/",
+        # "ENV_NAME": "Breakout-MinAtar",
+        # "DEBUG": False,
+        # "LOG_DIR": "logs/",
         "NUM_PARALLEL_RUNS": 30,
         "VF_COEF": 0.5,
         "NUM_STEPS": 128,
@@ -202,13 +202,11 @@ META_CONFIG = {
         # NOTE NORMALIZE_ENV not relevant, obs are flattened 10x10xN one-hot grids (N = num obj classes)
         "GAE_NORMALIZATION": True,
         "LAYER_NORM": False,
-        "INITIALIZERS": [
-            {
-                "shared": ["orthogonal", np.sqrt(2)],
-                "actor": ["orthogonal", 0.01],
-                "critic": ["orthogonal", 1],
-            },
-        ],
+        "INITIALIZERS": {
+            "shared": ["orthogonal", np.sqrt(2)],
+            "actor": ["orthogonal", 0.01],
+            "critic": ["orthogonal", 1],
+        },
     },
     "atari_baseline": {
         # constants
