@@ -85,7 +85,6 @@ def hyper_plot(cfg: str, dir: str):
         df = df.with_columns(pl.lit(run_id).alias("id"))
         dfs.append(df)
 
-    config_id = 12
     assert config_id is not None, "Cannot find default config"
     print("Default config id:", config_id)
 
