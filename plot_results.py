@@ -302,6 +302,13 @@ def _(df_norm, minatar_configs, np, pl):
         )
 
 
+    def config_signature(conf):
+        # identity of a hyperparameter configuration across environments:
+        # everything except the environment it was run on
+        return repr(sorted(
+            (k, repr(v)) for k, v in conf.items() if k != "ENV_NAME"
+        ))
+
     algo_ids = []
     sens_list = []
     per_env_list = []
@@ -311,11 +318,19 @@ def _(df_norm, minatar_configs, np, pl):
 
         ids = np.array(ids)
         df_sel = df_sens.filter(pl.col("id").is_in(ids))
-    
+
+        # tag each run with the hyperparameter setting shared across envs
+        sig_map = {int(j): config_signature(minatar_configs[int(j)]) for j in ids}
+        df_sel = df_sel.with_columns(
+            pl.col("id").replace_strict(sig_map).alias("hp")
+        )
+
+        # tune per environment: best config in each env, averaged over envs
         per_env = df_sel.group_by("env").agg(pl.col("perf").max())
         per_env = per_env["perf"].mean()
 
-        across_env = df_sel.group_by("id").agg(pl.col("perf").mean())
+        # best single fixed config: average each hp setting across envs, take best
+        across_env = df_sel.group_by("hp").agg(pl.col("perf").mean())
         across_env = across_env["perf"].max()
 
         sensitivity = per_env - across_env
