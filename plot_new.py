@@ -4,6 +4,9 @@ import msgpack
 import glob
 import config
 import tyro
+from tyro.extras import SubcommandApp
+
+app = SubcommandApp()
 
 
 def load_config(cfg_path):
@@ -35,24 +38,18 @@ def csv_dir_to_df(csv_dir, bin_path, configs, default_config, progess=False):
             print(f"Found default config at id={i}!")
             config_ids.append(i)
 
-        # df = pl.read_csv(path)
-        # df = df.group_by("seed").agg(pl.col("episodic_return").sum().alias("auc"))
-        # df = df.with_columns(pl.lit(run_id).alias("id"))
-        # df = df.with_columns(pl.lit(cfg["ENV_NAME"]).alias("env"))
-        # dfs.append(df)
         df = pd.read_csv(path)
         df = df.groupby(by="seed").sum()
+        df = df.rename(columns={"episodic_return": "auc"})
         df["env"] = cfg["ENV_NAME"]
         df["id"] = run_id
         df = df.drop(["step", "episode_len"], axis="columns")
         dfs.append(df)
 
     return pd.concat(dfs), config_ids
-    quit()
-    # cols: id, seed, auc, env
-    # return pl.concat(dfs), config_ids
 
 
+@app.command
 def cache_results(
     out_csv: str = "./minatar_results.csv", out_config: str = "./minatar_configs.bin"
 ):
@@ -99,5 +96,15 @@ def cache_results(
         binary_file.write(bin_data)
 
 
+@app.command
+def parallel_plot(
+    csv_path="./minatar_results.csv", config_path="./minatar_configs.bin"
+):
+    df = pd.read_csv(csv_path)
+    lst_conf = load_config(config_path)
+    print(df)
+    print(len(lst_conf), len(df["id"].unique()))
+
+
 if __name__ == "__main__":
-    tyro.cli(cache_results)
+    app.cli()

@@ -1,4 +1,4 @@
-seed,episodic_return,env,id
+seed,auc,env,id
 0,10080.0625,Breakout-MinAtar,918
 1,12366.765625,Breakout-MinAtar,918
 2,9951.765625,Breakout-MinAtar,918
